@@ -13,6 +13,22 @@ const firebaseConfig = {
 
 export const isConfigured = Boolean(firebaseConfig.apiKey)
 
+// Diagnóstico temporário: mostra no console se as env vars chegaram certinho
+// (sem expor o valor completo da apiKey). Remover depois que login estiver ok.
+if (typeof window !== 'undefined') {
+  const mask = (v) => (v ? `${v.slice(0, 6)}…${v.slice(-4)} (len ${v.length})` : '❌ VAZIO')
+  // eslint-disable-next-line no-console
+  console.log('[Firebase config]', {
+    isConfigured,
+    apiKey: mask(firebaseConfig.apiKey),
+    authDomain: firebaseConfig.authDomain || '❌ VAZIO',
+    projectId: firebaseConfig.projectId || '❌ VAZIO',
+    storageBucket: firebaseConfig.storageBucket || '❌ VAZIO',
+    messagingSenderId: firebaseConfig.messagingSenderId || '❌ VAZIO',
+    appId: mask(firebaseConfig.appId),
+  })
+}
+
 let app = null
 let auth = null
 let googleProvider = null
