@@ -1,7 +1,13 @@
-import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import { useAuth } from './AuthContext'
+import { loadCloudProgress, saveCloudProgress, mergeProgress } from '../lib/cloudProgress'
 
-// XP + achievements + daily streak, persisted per-user in localStorage.
+// XP + achievements + daily streak.
+// - localStorage é o cache rápido (funciona offline e em modo demo)
+// - Se o usuário está logado com Firebase, também sincroniza com Firestore:
+//     - no login: carrega do Firestore, faz merge com o local (preserva progresso
+//       feito como convidado antes do login)
+//     - durante a sessão: save debounced de 800ms
 // Level formula: level = floor(sqrt(xp / 50)) → XP to next level rises smoothly.
 
 const ProgressContext = createContext(null)
@@ -54,33 +60,89 @@ function daysBetween(a, b) {
   return Math.round((d2 - d1) / (1000 * 60 * 60 * 24))
 }
 
+function normalizeState(parsed) {
+  if (!parsed) return DEFAULT_STATE
+  return {
+    ...DEFAULT_STATE,
+    ...parsed,
+    perModule: { ...DEFAULT_STATE.perModule, ...(parsed.perModule || {}) },
+  }
+}
+
+function readLocal(storageKey) {
+  try {
+    const raw = localStorage.getItem(storageKey)
+    return raw ? normalizeState(JSON.parse(raw)) : null
+  } catch {
+    return null
+  }
+}
+
 export function ProgressProvider({ children }) {
   const { user } = useAuth()
   const uid = user?.uid || 'guest'
   const storageKey = `progress:${uid}`
+  const isCloudUser = Boolean(user?.uid) && user.uid !== 'guest' && user.uid !== 'demo-user'
 
   const [state, setState] = useState(DEFAULT_STATE)
   const [newAchievements, setNewAchievements] = useState([]) // queue for toasts
+  const [hydrating, setHydrating] = useState(true)           // true enquanto carrega do Firestore
+  // Ref pra saber se já hidratamos pra esse uid (evita dupla hidratação em React strict mode)
+  const hydratedForUidRef = useRef(null)
 
-  // Load on user change
+  // ── Hidratação: local + (se logado) Firestore ─────────────
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(storageKey)
-      if (raw) {
-        const parsed = JSON.parse(raw)
-        setState({ ...DEFAULT_STATE, ...parsed, perModule: { ...DEFAULT_STATE.perModule, ...(parsed.perModule || {}) } })
-      } else {
-        setState(DEFAULT_STATE)
-      }
-    } catch {
-      setState(DEFAULT_STATE)
+    let cancelled = false
+    setHydrating(true)
+
+    // 1. Carrega local primeiro (rápido, UI não fica travada)
+    const localState = readLocal(storageKey) || DEFAULT_STATE
+    setState(localState)
+
+    // 2. Se for usuário cloud, busca do Firestore e faz merge
+    if (isCloudUser) {
+      ;(async () => {
+        const cloud = await loadCloudProgress(uid)
+        if (cancelled) return
+
+        // Merge: progresso do guest (se existir) + cloud + local do mesmo uid
+        const guestLocal = readLocal('progress:guest')
+        let merged = localState
+        if (cloud) merged = mergeProgress(merged, cloud)
+        if (guestLocal) merged = mergeProgress(merged, guestLocal)
+
+        hydratedForUidRef.current = uid
+        setState(merged)
+        setHydrating(false)
+
+        // Se havia dados do guest, o usuário acabou de migrar — limpa o guest
+        // pra não re-mesclar em futuras sessões
+        if (guestLocal) {
+          try { localStorage.removeItem('progress:guest') } catch {}
+        }
+
+        // Escreve o estado merged de volta na nuvem
+        saveCloudProgress(uid, merged)
+      })()
+    } else {
+      hydratedForUidRef.current = uid
+      setHydrating(false)
     }
-  }, [storageKey])
 
-  // Persist
+    return () => { cancelled = true }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [storageKey, isCloudUser])
+
+  // ── Persistência ──────────────────────────────────────────
+  // Sempre escreve no localStorage (cache). Se logado, também salva na nuvem
+  // (debounced dentro de saveCloudProgress).
   useEffect(() => {
+    if (hydrating) return  // não salva estado transitório durante a carga inicial
     try { localStorage.setItem(storageKey, JSON.stringify(state)) } catch {}
-  }, [state, storageKey])
+    if (isCloudUser && hydratedForUidRef.current === uid) {
+      saveCloudProgress(uid, state)
+    }
+  }, [state, storageKey, isCloudUser, uid, hydrating])
 
   const addXP = useCallback((amount, { module, correct } = {}) => {
     setState(prev => {
@@ -145,6 +207,7 @@ export function ProgressProvider({ children }) {
     level,
     xpInLevel,
     xpToNext,
+    hydrating,
     addXP,
     newAchievements,
     dismissAchievement,
