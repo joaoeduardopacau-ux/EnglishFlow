@@ -5,28 +5,30 @@
 /* Theme tokens — dark (default) and light. Drive Tailwind bg-bg-* / border-* via CSS vars. */
 :root,
 :root[data-theme="dark"] {
-  --bg-base: #05050a;
-  --bg-card: #0f0f18;
-  --bg-elevated: #16161f;
-  --bg-hover: #1c1c28;
-  --border-subtle: rgba(139,92,246,0.12);
-  --border-default: rgba(139,92,246,0.25);
-  --border-bright: rgba(139,92,246,0.5);
+  --bg-base: #05080a;
+  --bg-card: #0f1418;
+  --bg-elevated: #161c20;
+  --bg-hover: #1c2328;
+  /* teal-500 = rgb(20,184,166) */
+  --border-subtle: rgba(20,184,166,0.14);
+  --border-default: rgba(20,184,166,0.28);
+  --border-bright: rgba(20,184,166,0.5);
   --text-primary: #f1f1f5;
   --text-muted: #9ca3af;
   color-scheme: dark;
 }
 
 :root[data-theme="light"] {
-  --bg-base: #f6f4fb;
+  --bg-base: #f4fbfa;
   --bg-card: #ffffff;
-  --bg-elevated: #faf7ff;
-  --bg-hover: #efe9f9;
-  --border-subtle: rgba(124,58,237,0.16);
-  --border-default: rgba(124,58,237,0.28);
-  --border-bright: rgba(124,58,237,0.5);
-  --text-primary: #1a1530;
-  --text-muted: #5b5875;
+  --bg-elevated: #f7fdfc;
+  --bg-hover: #e9f7f5;
+  /* teal-600 = rgb(13,148,136) */
+  --border-subtle: rgba(13,148,136,0.18);
+  --border-default: rgba(13,148,136,0.30);
+  --border-bright: rgba(13,148,136,0.5);
+  --text-primary: #0e1a1d;
+  --text-muted: #526268;
   color-scheme: light;
 }
 
@@ -81,12 +83,12 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(139, 92, 246, 0.3);
+    background: rgba(20, 184, 166, 0.32);
     border-radius: 999px;
   }
 
   ::selection {
-    background: rgba(139, 92, 246, 0.3);
+    background: rgba(20, 184, 166, 0.32);
     color: #fff;
   }
 }
@@ -200,7 +202,7 @@
   }
 
   .border-gradient {
-    border-image: linear-gradient(135deg, rgba(139,92,246,0.4), rgba(139,92,246,0.1)) 1;
+    border-image: linear-gradient(135deg, rgba(20,184,166,0.45), rgba(20,184,166,0.12)) 1;
   }
 
   .safe-pb {
