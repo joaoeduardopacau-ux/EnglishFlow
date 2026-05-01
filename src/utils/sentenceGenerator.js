@@ -39,8 +39,12 @@ const SUBJECTS = {
 }
 
 // ── Verbs ───────────────────────────────────────────────────
-// Each verb ships with: base / 3rd-singular-s / past / ing (English)
-// and PT conjugations { i, sg, pl, past, ger }.
+// Each verb ships with: base / 3rd-singular-s / past / pp (past participle) / ing (English)
+// and PT conjugations { i, sg, pl, past, pp, ger }.
+//
+// The pp (past participle) is required for Present Perfect templates
+// (have/has + pp). Denilso Lima Ch. 17-18 covers its formation for
+// regular (-ed) and irregular verbs.
 //
 // Semantic compatibility:
 //   - accepts: [classes] — which object classes (cls) this verb makes sense with.
@@ -48,26 +52,26 @@ const SUBJECTS = {
 //   - stative: true — don't use in present continuous ("I am knowing" → nope).
 const VERBS = [
   // Transitives (need object)
-  { base: 'like',   s: 'likes',   past: 'liked',    ing: 'liking',   pt: { i: 'gosto de',   sg: 'gosta de',   pl: 'gostam de',    past: 'gostou de',   ger: 'gostando de'  }, needsObj: true, level: 'Ini-1', accepts: ['*'], stative: true },
-  { base: 'love',   s: 'loves',   past: 'loved',    ing: 'loving',   pt: { i: 'amo',        sg: 'ama',        pl: 'amam',         past: 'amou',        ger: 'amando'       }, needsObj: true, level: 'Ini-1', accepts: ['*'], stative: true },
-  { base: 'want',   s: 'wants',   past: 'wanted',   ing: 'wanting',  pt: { i: 'quero',      sg: 'quer',       pl: 'querem',       past: 'quis',        ger: 'querendo',    inf: 'querer'    }, needsObj: true, level: 'Ini-1', accepts: ['food','drink','text','media','instr','tool','pet','info','language','sport','music'], stative: true },
-  { base: 'need',   s: 'needs',   past: 'needed',   ing: 'needing',  pt: { i: 'preciso de', sg: 'precisa de', pl: 'precisam de',  past: 'precisou de', ger: 'precisando de'}, needsObj: true, level: 'Ini-1', accepts: ['food','drink','text','media','instr','tool','info','language'], stative: true },
-  { base: 'eat',    s: 'eats',    past: 'ate',      ing: 'eating',   pt: { i: 'como',       sg: 'come',       pl: 'comem',        past: 'comeu',       ger: 'comendo'      }, needsObj: true, level: 'Ini-1', accepts: ['food'] },
-  { base: 'buy',    s: 'buys',    past: 'bought',   ing: 'buying',   pt: { i: 'compro',     sg: 'compra',     pl: 'compram',      past: 'comprou',     ger: 'comprando'    }, needsObj: true, level: 'Ini-1', accepts: ['food','drink','text','media','instr','tool','pet'] },
-  { base: 'see',    s: 'sees',    past: 'saw',      ing: 'seeing',   pt: { i: 'vejo',       sg: 'vê',         pl: 'veem',         past: 'viu',         ger: 'vendo',       inf: 'ver'       }, needsObj: true, level: 'Ini-1', accepts: ['food','drink','text','media','instr','opening','tool','pet','sport'], stative: true },
-  { base: 'read',   s: 'reads',   past: 'read',     ing: 'reading',  pt: { i: 'leio',       sg: 'lê',         pl: 'leem',         past: 'leu',         ger: 'lendo',       inf: 'ler'       }, needsObj: true, level: 'Ini-1', accepts: ['text'] },
-  { base: 'write',  s: 'writes',  past: 'wrote',    ing: 'writing',  pt: { i: 'escrevo',    sg: 'escreve',    pl: 'escrevem',     past: 'escreveu',    ger: 'escrevendo'   }, needsObj: true, level: 'Ini-1', accepts: ['text'] },
-  { base: 'drink',  s: 'drinks',  past: 'drank',    ing: 'drinking', pt: { i: 'bebo',       sg: 'bebe',       pl: 'bebem',        past: 'bebeu',       ger: 'bebendo'      }, needsObj: true, level: 'Ini-1', accepts: ['drink'] },
-  { base: 'watch',  s: 'watches', past: 'watched',  ing: 'watching', pt: { i: 'assisto',    sg: 'assiste',    pl: 'assistem',     past: 'assistiu',    ger: 'assistindo'   }, needsObj: true, level: 'Ini-1', accepts: ['media','sport','pet'] },
-  { base: 'play',   s: 'plays',   past: 'played',   ing: 'playing',  pt: { i: 'jogo',       sg: 'joga',       pl: 'jogam',        past: 'jogou',       ger: 'jogando'      }, needsObj: true, level: 'Ini-1', accepts: ['sport','music','instr'] },
-  { base: 'make',   s: 'makes',   past: 'made',     ing: 'making',   pt: { i: 'faço',       sg: 'faz',        pl: 'fazem',        past: 'fez',         ger: 'fazendo',     inf: 'fazer'     }, needsObj: true, level: 'Ini-1', accepts: ['food','drink','music'] },
-  { base: 'cook',   s: 'cooks',   past: 'cooked',   ing: 'cooking',  pt: { i: 'cozinho',    sg: 'cozinha',    pl: 'cozinham',     past: 'cozinhou',    ger: 'cozinhando'   }, needsObj: true, level: 'Ini-1', accepts: ['food'] },
-  { base: 'use',    s: 'uses',    past: 'used',     ing: 'using',    pt: { i: 'uso',        sg: 'usa',        pl: 'usam',         past: 'usou',        ger: 'usando'       }, needsObj: true, level: 'Inter-2', accepts: ['tool','instr','language','text'] },
-  { base: 'bring',  s: 'brings',  past: 'brought',  ing: 'bringing', pt: { i: 'trago',      sg: 'traz',       pl: 'trazem',       past: 'trouxe',      ger: 'trazendo',    inf: 'trazer'    }, needsObj: true, level: 'Inter-2', accepts: ['food','drink','text','media','instr','tool','sport','pet'] },
-  { base: 'open',   s: 'opens',   past: 'opened',   ing: 'opening',  pt: { i: 'abro',       sg: 'abre',       pl: 'abrem',        past: 'abriu',       ger: 'abrindo'      }, needsObj: true, level: 'Ini-1', accepts: ['opening','text'] },
-  { base: 'close',  s: 'closes',  past: 'closed',   ing: 'closing',  pt: { i: 'fecho',      sg: 'fecha',      pl: 'fecham',       past: 'fechou',      ger: 'fechando'     }, needsObj: true, level: 'Ini-1', accepts: ['opening','text'] },
-  { base: 'find',   s: 'finds',   past: 'found',    ing: 'finding',  pt: { i: 'encontro',   sg: 'encontra',   pl: 'encontram',    past: 'encontrou',   ger: 'encontrando'  }, needsObj: true, level: 'Inter-2', accepts: ['food','drink','text','media','instr','opening','tool','pet','info'] },
-  { base: 'know',   s: 'knows',   past: 'knew',     ing: 'knowing',  pt: { i: 'conheço',    sg: 'conhece',    pl: 'conhecem',     past: 'conheceu',    ger: 'conhecendo',  inf: 'conhecer'  }, needsObj: true, level: 'Inter-2', accepts: ['info','language','media','music','pet'], stative: true },
+  { base: 'like',   s: 'likes',   past: 'liked',    pp: 'liked',     ing: 'liking',   pt: { i: 'gosto de',   sg: 'gosta de',   pl: 'gostam de',    past: 'gostou de',   pp: 'gostado de',  ger: 'gostando de'  }, needsObj: true, level: 'Ini-1', accepts: ['*'], stative: true },
+  { base: 'love',   s: 'loves',   past: 'loved',    pp: 'loved',     ing: 'loving',   pt: { i: 'amo',        sg: 'ama',        pl: 'amam',         past: 'amou',        pp: 'amado',       ger: 'amando'       }, needsObj: true, level: 'Ini-1', accepts: ['*'], stative: true },
+  { base: 'want',   s: 'wants',   past: 'wanted',   pp: 'wanted',    ing: 'wanting',  pt: { i: 'quero',      sg: 'quer',       pl: 'querem',       past: 'quis',        pp: 'querido',     ger: 'querendo',    inf: 'querer'    }, needsObj: true, level: 'Ini-1', accepts: ['food','drink','text','media','instr','tool','pet','info','language','sport','music'], stative: true },
+  { base: 'need',   s: 'needs',   past: 'needed',   pp: 'needed',    ing: 'needing',  pt: { i: 'preciso de', sg: 'precisa de', pl: 'precisam de',  past: 'precisou de', pp: 'precisado de',ger: 'precisando de'}, needsObj: true, level: 'Ini-1', accepts: ['food','drink','text','media','instr','tool','info','language'], stative: true },
+  { base: 'eat',    s: 'eats',    past: 'ate',      pp: 'eaten',     ing: 'eating',   pt: { i: 'como',       sg: 'come',       pl: 'comem',        past: 'comeu',       pp: 'comido',      ger: 'comendo'      }, needsObj: true, level: 'Ini-1', accepts: ['food'] },
+  { base: 'buy',    s: 'buys',    past: 'bought',   pp: 'bought',    ing: 'buying',   pt: { i: 'compro',     sg: 'compra',     pl: 'compram',      past: 'comprou',     pp: 'comprado',    ger: 'comprando'    }, needsObj: true, level: 'Ini-1', accepts: ['food','drink','text','media','instr','tool','pet'] },
+  { base: 'see',    s: 'sees',    past: 'saw',      pp: 'seen',      ing: 'seeing',   pt: { i: 'vejo',       sg: 'vê',         pl: 'veem',         past: 'viu',         pp: 'visto',       ger: 'vendo',       inf: 'ver'       }, needsObj: true, level: 'Ini-1', accepts: ['food','drink','text','media','instr','opening','tool','pet','sport'], stative: true },
+  { base: 'read',   s: 'reads',   past: 'read',     pp: 'read',      ing: 'reading',  pt: { i: 'leio',       sg: 'lê',         pl: 'leem',         past: 'leu',         pp: 'lido',        ger: 'lendo',       inf: 'ler'       }, needsObj: true, level: 'Ini-1', accepts: ['text'] },
+  { base: 'write',  s: 'writes',  past: 'wrote',    pp: 'written',   ing: 'writing',  pt: { i: 'escrevo',    sg: 'escreve',    pl: 'escrevem',     past: 'escreveu',    pp: 'escrito',     ger: 'escrevendo'   }, needsObj: true, level: 'Ini-1', accepts: ['text'] },
+  { base: 'drink',  s: 'drinks',  past: 'drank',    pp: 'drunk',     ing: 'drinking', pt: { i: 'bebo',       sg: 'bebe',       pl: 'bebem',        past: 'bebeu',       pp: 'bebido',      ger: 'bebendo'      }, needsObj: true, level: 'Ini-1', accepts: ['drink'] },
+  { base: 'watch',  s: 'watches', past: 'watched',  pp: 'watched',   ing: 'watching', pt: { i: 'assisto',    sg: 'assiste',    pl: 'assistem',     past: 'assistiu',    pp: 'assistido',   ger: 'assistindo'   }, needsObj: true, level: 'Ini-1', accepts: ['media','sport','pet'] },
+  { base: 'play',   s: 'plays',   past: 'played',   pp: 'played',    ing: 'playing',  pt: { i: 'jogo',       sg: 'joga',       pl: 'jogam',        past: 'jogou',       pp: 'jogado',      ger: 'jogando'      }, needsObj: true, level: 'Ini-1', accepts: ['sport','music','instr'] },
+  { base: 'make',   s: 'makes',   past: 'made',     pp: 'made',      ing: 'making',   pt: { i: 'faço',       sg: 'faz',        pl: 'fazem',        past: 'fez',         pp: 'feito',       ger: 'fazendo',     inf: 'fazer'     }, needsObj: true, level: 'Ini-1', accepts: ['food','drink','music'] },
+  { base: 'cook',   s: 'cooks',   past: 'cooked',   pp: 'cooked',    ing: 'cooking',  pt: { i: 'cozinho',    sg: 'cozinha',    pl: 'cozinham',     past: 'cozinhou',    pp: 'cozinhado',   ger: 'cozinhando'   }, needsObj: true, level: 'Ini-1', accepts: ['food'] },
+  { base: 'use',    s: 'uses',    past: 'used',     pp: 'used',      ing: 'using',    pt: { i: 'uso',        sg: 'usa',        pl: 'usam',         past: 'usou',        pp: 'usado',       ger: 'usando'       }, needsObj: true, level: 'Inter-2', accepts: ['tool','instr','language','text'] },
+  { base: 'bring',  s: 'brings',  past: 'brought',  pp: 'brought',   ing: 'bringing', pt: { i: 'trago',      sg: 'traz',       pl: 'trazem',       past: 'trouxe',      pp: 'trazido',     ger: 'trazendo',    inf: 'trazer'    }, needsObj: true, level: 'Inter-2', accepts: ['food','drink','text','media','instr','tool','sport','pet'] },
+  { base: 'open',   s: 'opens',   past: 'opened',   pp: 'opened',    ing: 'opening',  pt: { i: 'abro',       sg: 'abre',       pl: 'abrem',        past: 'abriu',       pp: 'aberto',      ger: 'abrindo'      }, needsObj: true, level: 'Ini-1', accepts: ['opening','text'] },
+  { base: 'close',  s: 'closes',  past: 'closed',   pp: 'closed',    ing: 'closing',  pt: { i: 'fecho',      sg: 'fecha',      pl: 'fecham',       past: 'fechou',      pp: 'fechado',     ger: 'fechando'     }, needsObj: true, level: 'Ini-1', accepts: ['opening','text'] },
+  { base: 'find',   s: 'finds',   past: 'found',    pp: 'found',     ing: 'finding',  pt: { i: 'encontro',   sg: 'encontra',   pl: 'encontram',    past: 'encontrou',   pp: 'encontrado',  ger: 'encontrando'  }, needsObj: true, level: 'Inter-2', accepts: ['food','drink','text','media','instr','opening','tool','pet','info'] },
+  { base: 'know',   s: 'knows',   past: 'knew',     pp: 'known',     ing: 'knowing',  pt: { i: 'conheço',    sg: 'conhece',    pl: 'conhecem',     past: 'conheceu',    pp: 'conhecido',   ger: 'conhecendo',  inf: 'conhecer'  }, needsObj: true, level: 'Inter-2', accepts: ['info','language','media','music','pet'], stative: true },
 
   // Intransitives (no object)
   { base: 'sleep',  s: 'sleeps',  past: 'slept',    ing: 'sleeping', pt: { i: 'durmo',      sg: 'dorme',      pl: 'dormem',       past: 'dormiu',      ger: 'dormindo',    inf: 'dormir'    }, needsObj: false, level: 'Ini-1' },
@@ -126,6 +130,87 @@ const ADJECTIVES = [
   { en: 'excited',  pt: 'animado',     level: 'Inter-2' },
   { en: 'afraid',   pt: 'com medo',    level: 'Inter-2' },
   { en: 'proud',    pt: 'orgulhoso',   level: 'Inter-2' },
+]
+
+// Gradable adjectives for comparatives/superlatives (Denilso Lima Ch. on
+// comparativo — "bigger than", "the tallest", etc.). Kept separate from the
+// predicate-only ADJECTIVES pool above because not every feeling-adjective
+// compares naturally ("happier than" works; "more hungry than" less so).
+const COMP_ADJECTIVES = [
+  { en: 'tall',   comp: 'taller',          sup: 'tallest',          pt: 'alto',       ptComp: 'mais alto que',       ptSup: 'o mais alto',       level: 'Ini-1' },
+  { en: 'short',  comp: 'shorter',         sup: 'shortest',         pt: 'baixo',      ptComp: 'mais baixo que',      ptSup: 'o mais baixo',      level: 'Ini-1' },
+  { en: 'big',    comp: 'bigger',          sup: 'biggest',          pt: 'grande',     ptComp: 'maior que',           ptSup: 'o maior',           level: 'Ini-1' },
+  { en: 'small',  comp: 'smaller',         sup: 'smallest',         pt: 'pequeno',    ptComp: 'menor que',           ptSup: 'o menor',           level: 'Ini-1' },
+  { en: 'fast',   comp: 'faster',          sup: 'fastest',          pt: 'rápido',     ptComp: 'mais rápido que',     ptSup: 'o mais rápido',     level: 'Ini-1' },
+  { en: 'slow',   comp: 'slower',          sup: 'slowest',          pt: 'lento',      ptComp: 'mais lento que',      ptSup: 'o mais lento',      level: 'Ini-1' },
+  { en: 'young',  comp: 'younger',         sup: 'youngest',         pt: 'jovem',      ptComp: 'mais jovem que',      ptSup: 'o mais jovem',      level: 'Ini-1' },
+  { en: 'old',    comp: 'older',           sup: 'oldest',           pt: 'velho',      ptComp: 'mais velho que',      ptSup: 'o mais velho',      level: 'Ini-1' },
+  { en: 'good',   comp: 'better',          sup: 'best',             pt: 'bom',        ptComp: 'melhor que',          ptSup: 'o melhor',          level: 'Ini-1' },
+  { en: 'bad',    comp: 'worse',           sup: 'worst',            pt: 'ruim',       ptComp: 'pior que',            ptSup: 'o pior',            level: 'Ini-1' },
+  { en: 'smart',  comp: 'smarter',         sup: 'smartest',         pt: 'inteligente',ptComp: 'mais inteligente que',ptSup: 'o mais inteligente',level: 'Inter-2' },
+  { en: 'beautiful', comp: 'more beautiful', sup: 'most beautiful', pt: 'bonito',     ptComp: 'mais bonito que',     ptSup: 'o mais bonito',     level: 'Inter-2' },
+  { en: 'expensive', comp: 'more expensive', sup: 'most expensive', pt: 'caro',       ptComp: 'mais caro que',       ptSup: 'o mais caro',       level: 'Inter-2' },
+  { en: 'cheap',  comp: 'cheaper',         sup: 'cheapest',         pt: 'barato',     ptComp: 'mais barato que',     ptSup: 'o mais barato',     level: 'Inter-2' },
+  { en: 'easy',   comp: 'easier',          sup: 'easiest',          pt: 'fácil',      ptComp: 'mais fácil que',      ptSup: 'o mais fácil',      level: 'Inter-2' },
+  { en: 'difficult', comp: 'more difficult', sup: 'most difficult', pt: 'difícil',    ptComp: 'mais difícil que',    ptSup: 'o mais difícil',    level: 'Inter-2' },
+]
+
+// Modal verbs (Denilso Lima Ch. 19-23: can/could, may/might, should, must, will/would).
+// Modals in English are invariant (no -s for 3rd person singular) and take
+// the bare infinitive: "she can swim", not "she cans swims".
+// PT rendering uses a matching auxiliary per subject.
+const MODALS = [
+  {
+    en: 'can',
+    pt: { i: 'posso', sg: 'pode', you: 'pode', pl: 'podem', pl_nos: 'podemos' },
+    meaning: 'ability',
+    level: 'Ini-1',
+  },
+  {
+    en: 'should',
+    pt: { i: 'deveria', sg: 'deveria', you: 'deveria', pl: 'deveriam', pl_nos: 'deveríamos' },
+    meaning: 'advice',
+    level: 'Inter-2',
+  },
+  {
+    en: 'must',
+    pt: { i: 'devo', sg: 'deve', you: 'deve', pl: 'devem', pl_nos: 'devemos' },
+    meaning: 'obligation',
+    level: 'Inter-2',
+  },
+  {
+    en: 'could',
+    pt: { i: 'poderia', sg: 'poderia', you: 'poderia', pl: 'poderiam', pl_nos: 'poderíamos' },
+    meaning: 'polite-ability',
+    level: 'Inter-2',
+  },
+  {
+    en: 'may',
+    pt: { i: 'posso', sg: 'pode', you: 'pode', pl: 'podem', pl_nos: 'podemos' },
+    meaning: 'possibility',
+    level: 'Inter-2',
+  },
+]
+
+// Linking words / conjunctions (from Gramatica_inglesa_O_Guia_Completo — "linking words"):
+// and, but, because, so, or. Each links two clauses; the second clause inherits
+// a fresh subject+verb+object or a predicate adjective.
+const CONJUNCTIONS = [
+  { en: 'and',      pt: 'e',         level: 'Ini-1' },
+  { en: 'but',      pt: 'mas',       level: 'Ini-1' },
+  { en: 'because',  pt: 'porque',    level: 'Ini-1' },
+  { en: 'so',       pt: 'então',     level: 'Inter-2' },
+  { en: 'or',       pt: 'ou',        level: 'Inter-2' },
+]
+
+// Markers for Present Perfect (Denilso Lima Ch. Present Perfect I & II):
+// "have you ever ...?", "I've never ...", "she has already ...", "we've just ...".
+// Each marker slots between the auxiliary (have/has) and the past participle.
+const PP_MARKERS = [
+  { en: 'already', pt: 'já',                level: 'Ini-1', polarity: 'affirmative' },
+  { en: 'just',    pt: 'acabou de',         level: 'Inter-2', polarity: 'affirmative' }, // "she has just eaten" → "ela acabou de comer"
+  { en: 'never',   pt: 'nunca',             level: 'Ini-1', polarity: 'negative' },
+  { en: 'ever',    pt: 'alguma vez',        level: 'Inter-2', polarity: 'question' },
 ]
 
 const PLACES = [
@@ -199,6 +284,45 @@ function doesEn(kind) {
 }
 function didntDoes(kind) {
   return kind === 'sg' ? "doesn't" : "don't"
+}
+
+// Present Perfect auxiliary: has for 3rd-sg, have for everyone else.
+function haveEn(kind) {
+  return kind === 'sg' ? 'has' : 'have'
+}
+
+// Past Continuous auxiliary: was for I/he/she/it, were for you/we/they.
+function wasEn(kind) {
+  return kind === 'i' || kind === 'sg' ? 'was' : 'were'
+}
+function wasPt(kind) {
+  if (kind === 'i') return 'estava'
+  if (kind === 'sg') return 'estava'
+  if (kind === 'you') return 'estava'
+  return 'estavam' // pl
+}
+
+// Modal EN is invariant; pick the matching PT conjugation by subject kind.
+function modalPt(modal, kind, subj) {
+  if (kind === 'i') return modal.pt.i
+  if (kind === 'sg') return modal.pt.sg
+  if (kind === 'you') return modal.pt.you
+  // plural: "nós" → 1pp, else 3pp
+  if (subj && subj.pt === 'nós') return modal.pt.pl_nos
+  return modal.pt.pl
+}
+
+// Portuguese past participle auxiliary for perfect tenses: "tenho / tem / tem / têm / temos".
+// NB: Portuguese present perfect has a narrower meaning than English — it implies
+// ongoing/repeated action up to now. For generator simplicity we pair with markers
+// that make the translation natural ("já", "nunca", etc.), and for "just" we use
+// a different idiom ("acabou de + inf").
+function haveAuxPt(kind, subj) {
+  if (kind === 'i') return 'tenho'
+  if (kind === 'sg') return 'tem'
+  if (kind === 'you') return 'tem'
+  if (subj && subj.pt === 'nós') return 'temos'
+  return 'têm' // pl
 }
 
 function capitalize(s) {
@@ -543,6 +667,224 @@ const templates = [
       const en = `${capitalize(subj.en)} ${notEn} ${adj.en}.`
       const pt = `${ptPrefix(kind, subj)}não ${bePt(kind)} ${adj.pt}.`
       return { en, pt, level: maxOf(subj, adj), topic: 'adjectives' }
+    },
+  },
+
+  // ── Present Perfect (Denilso Lima Ch. 17-18) ───────────
+  // have/has + past participle, typically with markers "already", "never", "ever", "just".
+  // PT rendering uses past simple + adverb, which is how Brazilians naturally translate
+  // these — Portuguese present perfect ("tenho comido") carries a different meaning.
+  {
+    id: 'pp-already',
+    grammar: ['present-perfect', 'any'],
+    build: (maxLevel, topic) => {
+      const { subj, kind } = pickSubject(maxLevel)
+      // Stative verbs sound odd with "already" in perfect ("she has already known the answer")
+      const pair = pickObjAndVerb(maxLevel, topic, { excludeStative: true })
+      if (!pair) return null
+      const { obj, verb } = pair
+      const en = `${capitalize(subj.en)} ${haveEn(kind)} already ${verb.pp} ${obj.en}.`
+      const pt = `${ptPrefix(kind, subj)}já ${verb.pt.past} ${obj.pt}.`
+      return { en, pt, level: maxOf(subj, verb, obj), topic: obj.topic }
+    },
+  },
+  {
+    id: 'pp-never',
+    grammar: ['present-perfect', 'negatives', 'any'],
+    build: (maxLevel, topic) => {
+      const { subj, kind } = pickSubject(maxLevel)
+      const pair = pickObjAndVerb(maxLevel, topic, { excludeStative: true })
+      if (!pair) return null
+      const { obj, verb } = pair
+      const en = `${capitalize(subj.en)} ${haveEn(kind)} never ${verb.pp} ${obj.en}.`
+      const pt = `${ptPrefix(kind, subj)}nunca ${verb.pt.past} ${obj.pt}.`
+      return { en, pt, level: maxOf(subj, verb, obj), topic: obj.topic }
+    },
+  },
+  {
+    id: 'pp-ever-q',
+    grammar: ['present-perfect', 'questions', 'any'],
+    build: (maxLevel, topic) => {
+      const { subj, kind } = pickSubject(maxLevel)
+      const pair = pickObjAndVerb(maxLevel, topic, { excludeStative: true })
+      if (!pair) return null
+      const { obj, verb } = pair
+      const en = `${capitalize(haveEn(kind))} ${subj.en} ever ${verb.pp} ${obj.en}?`
+      const ptSubj = ptSubjectDisplay(kind, subj) || subj.pt
+      const pt = `${capitalize(ptSubj)} já ${verb.pt.past} ${obj.pt} alguma vez?`
+      return { en, pt, level: maxOf(subj, verb, obj), topic: obj.topic }
+    },
+  },
+  {
+    id: 'pp-just',
+    grammar: ['present-perfect', 'any'],
+    build: (maxLevel, topic) => {
+      const { subj, kind } = pickSubject(maxLevel)
+      const pair = pickObjAndVerb(maxLevel, topic, { excludeStative: true })
+      if (!pair) return null
+      const { obj, verb } = pair
+      const en = `${capitalize(subj.en)} ${haveEn(kind)} just ${verb.pp} ${obj.en}.`
+      // "She has just eaten" → "Ela acabou de comer" (idiomatic PT)
+      const acabou = kind === 'i' ? 'acabei' : (kind === 'pl' && subj.pt === 'nós') ? 'acabamos' : kind === 'pl' ? 'acabaram' : 'acabou'
+      const pt = `${ptPrefix(kind, subj)}${acabou} de ${ptInfinitive(verb)} ${obj.pt}.`
+      return { en, pt, level: maxOf(subj, verb, obj), topic: obj.topic }
+    },
+  },
+
+  // ── Modal verbs (Denilso Lima Ch. 19-23) ───────────────
+  // can / could / should / must / may — bare infinitive after the modal.
+  {
+    id: 'modal-svo',
+    grammar: ['modal-verbs', 'any'],
+    build: (maxLevel, topic) => {
+      const { subj, kind } = pickSubject(maxLevel)
+      const modal = pick(filterLevel(MODALS, maxLevel))
+      const pair = pickObjAndVerb(maxLevel, topic, { excludeStative: true })
+      if (!pair) return null
+      const { obj, verb } = pair
+      const en = `${capitalize(subj.en)} ${modal.en} ${verb.base} ${obj.en}.`
+      const pt = `${ptPrefix(kind, subj)}${modalPt(modal, kind, subj)} ${ptInfinitive(verb)} ${obj.pt}.`
+      return { en, pt, level: maxOf(subj, verb, obj, modal), topic: obj.topic }
+    },
+  },
+  {
+    id: 'modal-can-q',
+    grammar: ['modal-verbs', 'questions', 'any'],
+    build: (maxLevel, topic) => {
+      const { subj, kind } = pickSubject(maxLevel)
+      // "Can you open the door?" — use can/could for questions (natural request pattern)
+      const modal = pick([MODALS[0], MODALS[3]]) // can, could
+      const pair = pickObjAndVerb(maxLevel, topic, { excludeStative: true })
+      if (!pair) return null
+      const { obj, verb } = pair
+      const en = `${capitalize(modal.en)} ${subj.en} ${verb.base} ${obj.en}?`
+      const ptSubj = ptSubjectDisplay(kind, subj) || subj.pt
+      const pt = `${capitalize(ptSubj)} ${modalPt(modal, kind, subj)} ${ptInfinitive(verb)} ${obj.pt}?`
+      return { en, pt, level: maxOf(subj, verb, obj, modal), topic: obj.topic }
+    },
+  },
+
+  // ── Comparatives & Superlatives ────────────────────────
+  {
+    id: 'comp-adj',
+    grammar: ['comparatives', 'any'],
+    build: (maxLevel) => {
+      // Two different subjects to compare. Bias toward 3rd-person singular on both sides.
+      const a = pick(filterLevel(SUBJECTS.sg, maxLevel))
+      let b = pick(filterLevel(SUBJECTS.sg, maxLevel))
+      // Try to avoid comparing a subject with itself.
+      for (let i = 0; i < 5 && b.en === a.en; i++) b = pick(filterLevel(SUBJECTS.sg, maxLevel))
+      if (b.en === a.en) return null
+      const adj = pick(filterLevel(COMP_ADJECTIVES, maxLevel))
+      const en = `${capitalize(a.en)} is ${adj.comp} than ${b.en}.`
+      const pt = `${capitalize(a.pt)} é ${adj.ptComp} ${b.pt}.`
+      return { en, pt, level: maxOf(a, b, adj), topic: 'adjectives' }
+    },
+  },
+  {
+    id: 'sup-adj',
+    grammar: ['comparatives', 'any'],
+    build: (maxLevel) => {
+      const subj = pick(filterLevel(SUBJECTS.sg, maxLevel))
+      const adj = pick(filterLevel(COMP_ADJECTIVES, maxLevel))
+      const en = `${capitalize(subj.en)} is the ${adj.sup}.`
+      const pt = `${capitalize(subj.pt)} é ${adj.ptSup}.`
+      return { en, pt, level: maxOf(subj, adj), topic: 'adjectives' }
+    },
+  },
+
+  // ── Linking words / conjunctions ───────────────────────
+  // Chains two independent clauses with a conjunction (Gramatica Completo § linking words).
+  {
+    id: 'conj-because-adj',
+    grammar: ['linking-words', 'any'],
+    build: (maxLevel) => {
+      // "She is tired because she works every day."
+      const { subj, kind } = pickSubject(maxLevel)
+      const adj = pick(filterLevel(ADJECTIVES, maxLevel))
+      // Second clause: same subject, different action
+      const verb = pick(filterLevel(VERBS.filter(v => !v.needsObj), maxLevel))
+      const time = pickTime(maxLevel, 'present')
+      const timeEn = time ? ' ' + time.en : ''
+      const timePt = time ? ' ' + time.pt : ''
+      const en = `${capitalize(subj.en)} ${beEn(kind)} ${adj.en} because ${subj.en} ${enVerbPresent(verb, kind)}${timeEn}.`
+      const ptSubj2 = ptSubjectDisplay(kind, subj) || subj.pt
+      const pt = `${ptPrefix(kind, subj)}${bePt(kind)} ${adj.pt} porque ${ptSubj2} ${ptVerbPresent(verb, kind)}${timePt}.`
+      return { en, pt, level: maxOf(subj, adj, verb), topic: 'adjectives' }
+    },
+  },
+  {
+    id: 'conj-but',
+    grammar: ['linking-words', 'any'],
+    build: (maxLevel, topic) => {
+      // "I like pizza but I don't eat bread."
+      const { subj, kind } = pickSubject(maxLevel)
+      const pair1 = pickObjAndVerb(maxLevel, topic)
+      const pair2 = pickObjAndVerb(maxLevel, topic)
+      if (!pair1 || !pair2) return null
+      if (pair1.obj.en === pair2.obj.en) return null
+      const en = `${capitalize(subj.en)} ${enVerbPresent(pair1.verb, kind)} ${pair1.obj.en} but ${subj.en} ${didntDoes(kind)} ${pair2.verb.base} ${pair2.obj.en}.`
+      const ptSubj2 = ptSubjectDisplay(kind, subj) || subj.pt
+      const pt = `${ptPrefix(kind, subj)}${ptVerbPresent(pair1.verb, kind)} ${pair1.obj.pt} mas ${ptSubj2} não ${ptVerbPresent(pair2.verb, kind)} ${pair2.obj.pt}.`
+      return { en, pt, level: maxOf(subj, pair1.verb, pair1.obj, pair2.verb, pair2.obj), topic: pair1.obj.topic }
+    },
+  },
+  {
+    id: 'conj-and',
+    grammar: ['linking-words', 'any'],
+    build: (maxLevel, topic) => {
+      // "She reads a book and drinks coffee."
+      const { subj, kind } = pickSubject(maxLevel)
+      const pair1 = pickObjAndVerb(maxLevel, topic)
+      const pair2 = pickObjAndVerb(maxLevel, topic)
+      if (!pair1 || !pair2) return null
+      if (pair1.verb.base === pair2.verb.base && pair1.obj.en === pair2.obj.en) return null
+      const en = `${capitalize(subj.en)} ${enVerbPresent(pair1.verb, kind)} ${pair1.obj.en} and ${enVerbPresent(pair2.verb, kind)} ${pair2.obj.en}.`
+      const pt = `${ptPrefix(kind, subj)}${ptVerbPresent(pair1.verb, kind)} ${pair1.obj.pt} e ${ptVerbPresent(pair2.verb, kind)} ${pair2.obj.pt}.`
+      return { en, pt, level: maxOf(subj, pair1.verb, pair1.obj, pair2.verb, pair2.obj), topic: pair1.obj.topic }
+    },
+  },
+  {
+    id: 'conj-so',
+    grammar: ['linking-words', 'any'],
+    build: (maxLevel) => {
+      // "I am hungry so I eat bread."
+      const { subj, kind } = pickSubject(maxLevel)
+      const adj = pick(filterLevel(ADJECTIVES, maxLevel))
+      const pair = pickObjAndVerb(maxLevel)
+      if (!pair) return null
+      const { obj, verb } = pair
+      const en = `${capitalize(subj.en)} ${beEn(kind)} ${adj.en} so ${subj.en} ${enVerbPresent(verb, kind)} ${obj.en}.`
+      const ptSubj2 = ptSubjectDisplay(kind, subj) || subj.pt
+      const pt = `${ptPrefix(kind, subj)}${bePt(kind)} ${adj.pt} então ${ptSubj2} ${ptVerbPresent(verb, kind)} ${obj.pt}.`
+      return { en, pt, level: maxOf(subj, adj, verb, obj), topic: obj.topic }
+    },
+  },
+
+  // ── Past Continuous ────────────────────────────────────
+  {
+    id: 'pastcont-svo',
+    grammar: ['past-continuous', 'any'],
+    build: (maxLevel, topic) => {
+      const { subj, kind } = pickSubject(maxLevel)
+      const pair = pickObjAndVerb(maxLevel, topic, { excludeStative: true })
+      if (!pair) return null
+      const { obj, verb } = pair
+      const en = `${capitalize(subj.en)} ${wasEn(kind)} ${verb.ing} ${obj.en}.`
+      const pt = `${ptPrefix(kind, subj)}${wasPt(kind)} ${verb.pt.ger} ${obj.pt}.`
+      return { en, pt, level: maxOf(subj, verb, obj), topic: obj.topic }
+    },
+  },
+  {
+    id: 'pastcont-intr',
+    grammar: ['past-continuous', 'any'],
+    build: (maxLevel) => {
+      const { subj, kind } = pickSubject(maxLevel)
+      const verb = pick(filterLevel(VERBS.filter(v => !v.needsObj), maxLevel))
+      const place = pick(filterLevel(PLACES, maxLevel))
+      const en = `${capitalize(subj.en)} ${wasEn(kind)} ${verb.ing} ${place.en}.`
+      const pt = `${ptPrefix(kind, subj)}${wasPt(kind)} ${verb.pt.ger} ${place.pt}.`
+      return { en, pt, level: maxOf(subj, verb, place), topic: place.topic || 'places' }
     },
   },
 ]

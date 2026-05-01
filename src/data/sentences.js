@@ -166,26 +166,78 @@ export const sentences = raw.map((r, i) => ({
   words: tokenize(r[0]),
 }))
 
-// Dynamic generator — produces unlimited variety from templates + POS-tagged pools.
+// Template-based generator — now used as a last-resort fallback only.
 import { generateSentence, generateSentences, shuffleWords as genShuffle } from '../utils/sentenceGenerator'
+// Curated pool extracted from the Oxford Guide to English Grammar. Each entry is
+// a real, grammatically correct sentence with a hand-written PT translation —
+// this is now the PRIMARY source of practice material, replacing the random
+// template generator.
+import { OXFORD_SENTENCES } from './oxfordSentences'
 
-// Mix: 30% curated seed sentences, 70% freshly generated.
-// Curated sentences are only used when the grammar focus is "any" — when the
-// user has picked a specific tense/type, we always go through the generator
-// so the structure actually matches what they want to practice.
-export function getRandomSentence(level = 'all', topic = 'all', grammar = 'any') {
-  const useCurated = grammar === 'any' && Math.random() < 0.3
-  if (useCurated) {
-    let pool = [...sentences]
-    if (level && level !== 'all') pool = pool.filter(s => s.level === level)
-    if (topic && topic !== 'all') pool = pool.filter(s => s.topic === topic)
-    if (pool.length > 0) return pool[Math.floor(Math.random() * pool.length)]
+// Every sentence the app surfaces passes through `finalize` so it has the shape
+// { id, english, portuguese, level, topic, grammar, words } the rest of the app
+// expects. This wraps an Oxford-pool entry or legacy seed entry.
+let nextId = 100000
+function tokenizeSentence(s) {
+  return s.match(/[\w']+|[.,!?;:]/g) || []
+}
+function finalizeOxford(entry) {
+  return {
+    id: ++nextId,
+    english: entry.en,
+    portuguese: entry.pt,
+    level: entry.level,
+    topic: entry.topic,
+    grammar: entry.grammar,
+    source: entry.source,
+    words: tokenizeSentence(entry.en),
   }
+}
+
+// Filter the Oxford pool by the active focus. Each axis is independent:
+// empty/'all'/'any' means "don't constrain on this axis".
+function filterOxford({ level, topic, grammar }) {
+  let pool = OXFORD_SENTENCES
+  if (grammar && grammar !== 'any') pool = pool.filter(s => s.grammar === grammar)
+  if (level && level !== 'all') pool = pool.filter(s => s.level === level)
+  if (topic && topic !== 'all') pool = pool.filter(s => s.topic === topic)
+  return pool
+}
+
+// Get a random sentence. Strategy:
+//   1. Try Oxford pool matching grammar+level+topic
+//   2. Relax topic if no match
+//   3. Relax level if still no match
+//   4. Fall back to template generator (last resort for exotic focus combinations)
+export function getRandomSentence(level = 'all', topic = 'all', grammar = 'any') {
+  // Pass 1: full filter
+  let pool = filterOxford({ level, topic, grammar })
+  if (pool.length) return finalizeOxford(pool[Math.floor(Math.random() * pool.length)])
+  // Pass 2: drop topic
+  pool = filterOxford({ level, grammar })
+  if (pool.length) return finalizeOxford(pool[Math.floor(Math.random() * pool.length)])
+  // Pass 3: drop level too
+  pool = filterOxford({ grammar })
+  if (pool.length) return finalizeOxford(pool[Math.floor(Math.random() * pool.length)])
+  // Pass 4: legacy template generator (shouldn't usually fire — kept so the app
+  // never returns null if the user picks an unusual combo)
   return generateSentence({ level, topic, grammar })
 }
 
 export function getRandomSentences(n = 5, level = 'all', topic = 'all', grammar = 'any') {
-  return generateSentences(n, { level, topic, grammar })
+  // Shuffle the filtered Oxford pool and return up to n unique sentences.
+  // Only dip into the generator if the pool is smaller than n.
+  const pool = filterOxford({ level, topic, grammar })
+  if (pool.length >= n) {
+    const shuffled = [...pool].sort(() => Math.random() - 0.5)
+    return shuffled.slice(0, n).map(finalizeOxford)
+  }
+  // Small pool: return everything we have, then top up with the generator.
+  const out = [...pool].sort(() => Math.random() - 0.5).map(finalizeOxford)
+  while (out.length < n) {
+    out.push(generateSentence({ level, topic, grammar }))
+  }
+  return out
 }
 
 export const shuffleWords = genShuffle
