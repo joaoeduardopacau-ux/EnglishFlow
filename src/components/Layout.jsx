@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Home, Layers, Gamepad2, Headphones, Blocks, BookOpen, LogOut, Mic, Trophy, Sun, Moon, Sparkles } from 'lucide-react'
+import { Home, Layers, Gamepad2, Headphones, Blocks, BookOpen, LogOut, Mic, Trophy, Sun, Moon, Sparkles, ClipboardList } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useProgress } from '../contexts/ProgressContext'
 import { useTheme } from '../contexts/ThemeContext'
@@ -15,6 +15,7 @@ const navItems = [
   { to: '/builder', icon: Blocks, label: 'Montar Frase' },
   { to: '/dictionary', icon: BookOpen, label: 'Dicionário' },
   { to: '/achievements', icon: Trophy, label: 'Conquistas' },
+  { to: '/study-quiz', icon: ClipboardList, label: 'Quiz FTD' },
 ]
 
 // Bottom nav on mobile — keep it to 5 most-used items

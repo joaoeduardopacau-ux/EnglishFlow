@@ -16,6 +16,7 @@ import Dictionary from './pages/Dictionary'
 import Speaking from './pages/Speaking'
 import Achievements from './pages/Achievements'
 import Learn from './pages/Learn'
+import StudyQuiz from './pages/StudyQuiz'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -66,6 +67,7 @@ export default function App() {
                   <Route path="speaking" element={<Speaking />} />
                   <Route path="dictionary" element={<Dictionary />} />
                   <Route path="achievements" element={<Achievements />} />
+                  <Route path="study-quiz" element={<StudyQuiz />} />
                 </Route>
               </Routes>
             </FocusProvider>
