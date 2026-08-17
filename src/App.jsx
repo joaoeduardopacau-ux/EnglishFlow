@@ -4,7 +4,9 @@ import { ProgressProvider } from './contexts/ProgressContext'
 import { StageProvider } from './contexts/StageContext'
 import { FocusProvider } from './contexts/FocusContext'
 import { ThemeProvider } from './contexts/ThemeContext'
+import { ReviewProvider } from './contexts/ReviewContext'
 import AchievementToasts from './components/AchievementToasts'
+import InstallPrompt from './components/InstallPrompt'
 import Layout from './components/Layout'
 import Login from './pages/Login'
 import Home from './pages/Home'
@@ -16,6 +18,16 @@ import Dictionary from './pages/Dictionary'
 import Speaking from './pages/Speaking'
 import Achievements from './pages/Achievements'
 import Learn from './pages/Learn'
+import Dashboard from './pages/Dashboard'
+import StreakCalendar from './pages/StreakCalendar'
+import Review from './pages/Review'
+import Writing from './pages/Writing'
+import Songs from './pages/Songs'
+import Videos from './pages/Videos'
+import LevelTest from './pages/LevelTest'
+import Settings from './pages/Settings'
+import Leaderboard from './pages/Leaderboard'
+import Chatbot from './pages/Chatbot'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -44,32 +56,45 @@ export default function App() {
     <ThemeProvider>
       <AuthProvider>
         <ProgressProvider>
-          <StageProvider>
-            <FocusProvider>
-              <AchievementToasts />
-              <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route
-                  path="/"
-                  element={
-                    <ProtectedRoute>
-                      <Layout />
-                    </ProtectedRoute>
-                  }
-                >
-                  <Route index element={<Home />} />
-                  <Route path="learn" element={<Learn />} />
-                  <Route path="flashcards" element={<Flashcards />} />
-                  <Route path="games" element={<Games />} />
-                  <Route path="listening" element={<Listening />} />
-                  <Route path="builder" element={<SentenceBuilder />} />
-                  <Route path="speaking" element={<Speaking />} />
-                  <Route path="dictionary" element={<Dictionary />} />
-                  <Route path="achievements" element={<Achievements />} />
-                </Route>
-              </Routes>
-            </FocusProvider>
-          </StageProvider>
+          <ReviewProvider>
+            <StageProvider>
+              <FocusProvider>
+                <AchievementToasts />
+                <InstallPrompt />
+                <Routes>
+                  <Route path="/login" element={<Login />} />
+                  <Route
+                    path="/"
+                    element={
+                      <ProtectedRoute>
+                        <Layout />
+                      </ProtectedRoute>
+                    }
+                  >
+                    <Route index element={<Home />} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="streak" element={<StreakCalendar />} />
+                    <Route path="review" element={<Review />} />
+                    <Route path="writing" element={<Writing />} />
+                    <Route path="songs" element={<Songs />} />
+                    <Route path="videos" element={<Videos />} />
+                    <Route path="level-test" element={<LevelTest />} />
+                    <Route path="settings" element={<Settings />} />
+                    <Route path="leaderboard" element={<Leaderboard />} />
+                    <Route path="chatbot" element={<Chatbot />} />
+                    <Route path="learn" element={<Learn />} />
+                    <Route path="flashcards" element={<Flashcards />} />
+                    <Route path="games" element={<Games />} />
+                    <Route path="listening" element={<Listening />} />
+                    <Route path="builder" element={<SentenceBuilder />} />
+                    <Route path="speaking" element={<Speaking />} />
+                    <Route path="dictionary" element={<Dictionary />} />
+                    <Route path="achievements" element={<Achievements />} />
+                  </Route>
+                </Routes>
+              </FocusProvider>
+            </StageProvider>
+          </ReviewProvider>
         </ProgressProvider>
       </AuthProvider>
     </ThemeProvider>

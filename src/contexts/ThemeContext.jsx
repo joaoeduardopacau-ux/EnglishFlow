@@ -1,17 +1,24 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 
-// Simple dark/light theme with localStorage persistence.
-// Applied via `data-theme` on <html>; Tailwind bg-bg-* tokens read CSS vars.
+// Múltiplos temas com CSS vars.
 
 const ThemeContext = createContext(null)
 const STORAGE_KEY = 'theme'
 
+export const THEMES = [
+  { id: 'dark', label: 'Escuro', emoji: '🌙', desc: 'Padrão escuro' },
+  { id: 'light', label: 'Claro', emoji: '☀️', desc: 'Luz de dia' },
+  { id: 'sunset', label: 'Sunset', emoji: '🌅', desc: 'Laranja quente' },
+  { id: 'ocean', label: 'Ocean', emoji: '🌊', desc: 'Azul profundo' },
+  { id: 'forest', label: 'Forest', emoji: '🌲', desc: 'Verde natural' },
+  { id: 'midnight', label: 'Midnight', emoji: '🌌', desc: 'Roxo místico' },
+]
+
 function readInitial() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved === 'light' || saved === 'dark') return saved
+    if (saved && THEMES.some(t => t.id === saved)) return saved
   } catch {}
-  // Prefer OS preference on first load
   if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: light)').matches) {
     return 'light'
   }
@@ -26,10 +33,11 @@ export function ThemeProvider({ children }) {
     try { localStorage.setItem(STORAGE_KEY, theme) } catch {}
   }, [theme])
 
+  // Toggle mantém compatibilidade com código antigo (dark <-> light)
   const toggle = useCallback(() => setTheme(t => (t === 'dark' ? 'light' : 'dark')), [])
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggle }}>
+    <ThemeContext.Provider value={{ theme, setTheme, toggle, themes: THEMES }}>
       {children}
     </ThemeContext.Provider>
   )

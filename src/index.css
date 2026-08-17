@@ -32,6 +32,62 @@
   color-scheme: light;
 }
 
+/* SUNSET - laranja/rosa quente */
+:root[data-theme="sunset"] {
+  --bg-base: #1a0a1f;
+  --bg-card: #2a0f2a;
+  --bg-elevated: #3a1435;
+  --bg-hover: #4a1a3f;
+  --border-subtle: rgba(251,146,60,0.18);
+  --border-default: rgba(251,146,60,0.32);
+  --border-bright: rgba(251,146,60,0.5);
+  --text-primary: #ffe4d6;
+  --text-muted: #cbb;
+  color-scheme: dark;
+}
+
+/* OCEAN - azul profundo */
+:root[data-theme="ocean"] {
+  --bg-base: #050a1a;
+  --bg-card: #0a1428;
+  --bg-elevated: #101d38;
+  --bg-hover: #182a4a;
+  --border-subtle: rgba(96,165,250,0.18);
+  --border-default: rgba(96,165,250,0.32);
+  --border-bright: rgba(96,165,250,0.5);
+  --text-primary: #dbeafe;
+  --text-muted: #94a3b8;
+  color-scheme: dark;
+}
+
+/* FOREST - verde escuro natural */
+:root[data-theme="forest"] {
+  --bg-base: #0a1410;
+  --bg-card: #10201a;
+  --bg-elevated: #182b24;
+  --bg-hover: #22382e;
+  --border-subtle: rgba(34,197,94,0.18);
+  --border-default: rgba(34,197,94,0.32);
+  --border-bright: rgba(34,197,94,0.5);
+  --text-primary: #dcfce7;
+  --text-muted: #86efac;
+  color-scheme: dark;
+}
+
+/* MIDNIGHT - roxo profundo (padrão purple) */
+:root[data-theme="midnight"] {
+  --bg-base: #0a0a1a;
+  --bg-card: #14142a;
+  --bg-elevated: #1e1e40;
+  --bg-hover: #282856;
+  --border-subtle: rgba(168,85,247,0.20);
+  --border-default: rgba(168,85,247,0.35);
+  --border-bright: rgba(168,85,247,0.55);
+  --text-primary: #f1e6ff;
+  --text-muted: #a99cc7;
+  color-scheme: dark;
+}
+
 @layer base {
   * {
     -webkit-tap-highlight-color: transparent;

@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Home, Layers, Gamepad2, Headphones, Blocks, BookOpen, LogOut, Mic, Trophy, Sun, Moon, Sparkles } from 'lucide-react'
+import { Home, Layers, Gamepad2, Headphones, Blocks, BookOpen, LogOut, Mic, Trophy, Sun, Moon, Sparkles, BarChart3, Flame, Brain, PenLine, Music2, Video, GraduationCap, Settings as SettingsIcon, Bot } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useProgress } from '../contexts/ProgressContext'
 import { useTheme } from '../contexts/ThemeContext'
@@ -7,6 +7,16 @@ import BottomNav from './BottomNav'
 
 const navItems = [
   { to: '/', icon: Home, label: 'Início' },
+  { to: '/dashboard', icon: BarChart3, label: 'Dashboard' },
+  { to: '/streak', icon: Flame, label: 'Streak Calendar' },
+  { to: '/review', icon: Brain, label: 'Revisão Diária' },
+  { to: '/writing', icon: PenLine, label: 'Writing' },
+  { to: '/songs', icon: Music2, label: 'Músicas' },
+  { to: '/videos', icon: Video, label: 'Vídeos' },
+  { to: '/level-test', icon: GraduationCap, label: 'Teste de Nível' },
+  { to: '/chatbot', icon: Bot, label: 'AI Chatbot' },
+  { to: '/leaderboard', icon: Trophy, label: 'Ranking' },
+  { to: '/settings', icon: SettingsIcon, label: 'Configurações' },
   { to: '/learn', icon: Sparkles, label: 'Foco de Estudo' },
   { to: '/flashcards', icon: Layers, label: 'Flashcards' },
   { to: '/games', icon: Gamepad2, label: 'Jogos' },

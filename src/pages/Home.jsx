@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
-import { Layers, Gamepad2, Headphones, Blocks, BookOpen, Flame, TrendingUp, Trophy, Mic, Sparkles, ArrowRight } from 'lucide-react'
+import { Layers, Gamepad2, Headphones, Blocks, BookOpen, Flame, TrendingUp, Trophy, Mic, Sparkles, ArrowRight, BarChart3 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useProgress } from '../contexts/ProgressContext'
 import { useFocus } from '../contexts/FocusContext'
 import { dictionary } from '../data/dictionary'
+import DailyGoalCard from '../components/DailyGoalCard'
 
 const modules = [
   {
@@ -49,6 +50,13 @@ const modules = [
     gradient: 'from-purple-800 to-slate-900',
   },
   {
+    to: '/dashboard',
+    icon: BarChart3,
+    title: 'Dashboard',
+    desc: 'Veja gráficos e estatísticas do seu progresso',
+    gradient: 'from-emerald-600 to-teal-800',
+  },
+  {
     to: '/achievements',
     icon: Trophy,
     title: 'Conquistas',
@@ -87,6 +95,11 @@ export default function Home() {
             <Stat icon={BookOpen} label="Dicionário" value={`${dictionary.length}`} suffix="palavras" color="text-fuchsia-300" />
           </div>
         </div>
+      </section>
+
+      {/* Meta diária */}
+      <section>
+        <DailyGoalCard />
       </section>
 
       {/* Learn focus hub */}

@@ -1,0 +1,44 @@
+{
+  "name": "EnglishFlow — English Trainer",
+  "short_name": "EnglishFlow",
+  "description": "Aprenda inglês com flashcards, jogos, listening, speaking e muito mais!",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#05080a",
+  "theme_color": "#764ba2",
+  "lang": "pt-BR",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "url": "/dashboard",
+      "description": "Ver estatísticas"
+    },
+    {
+      "name": "Revisão",
+      "url": "/review",
+      "description": "Revisão espaçada"
+    },
+    {
+      "name": "Flashcards",
+      "url": "/flashcards",
+      "description": "Praticar flashcards"
+    }
+  ]
+}

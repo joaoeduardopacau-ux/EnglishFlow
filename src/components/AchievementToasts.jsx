@@ -1,12 +1,26 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useProgress } from '../contexts/ProgressContext'
+import { fireBigConfetti } from '../lib/confetti'
+import { playAchievement } from '../lib/sounds'
 
 export default function AchievementToasts() {
   const { newAchievements, dismissAchievement } = useProgress()
+  const prevCountRef = useRef(0)
 
   // Auto-dismiss each toast after 4s
   useEffect(() => {
-    if (newAchievements.length === 0) return
+    if (newAchievements.length === 0) {
+      prevCountRef.current = 0
+      return
+    }
+
+    // Novo achievement -> confetti + som
+    if (newAchievements.length > prevCountRef.current) {
+      fireBigConfetti()
+      playAchievement()
+    }
+    prevCountRef.current = newAchievements.length
+
     const timers = newAchievements.map(a =>
       setTimeout(() => dismissAchievement(a.id), 4000)
     )

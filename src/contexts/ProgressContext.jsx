@@ -17,6 +17,7 @@ const DEFAULT_STATE = {
   totalCorrect: 0,
   totalAttempts: 0,
   streak: 0,              // consecutive days with ≥1 correct answer
+  bestStreak: 0,          // maior sequência já alcançada
   lastActiveDate: null,   // ISO date string (yyyy-mm-dd)
   perModule: {
     flashcards: { correct: 0, attempts: 0 },
@@ -26,6 +27,8 @@ const DEFAULT_STATE = {
     speaking: { correct: 0, attempts: 0 },
   },
   achievements: [], // unlocked achievement ids
+  dailyLog: {},     // { '2026-08-17': { xp: 50, correct: 5, attempts: 8 } }
+  dailyGoal: 50,    // meta diária de XP (default: 50 = ~10min)
 }
 
 // ── Achievements catalog ────────────────────────────────────
@@ -166,14 +169,35 @@ export function ProgressProvider({ children }) {
           }
         : prev.perModule
 
+      // Atualiza log diário
+      const todayLog = prev.dailyLog[today] || { xp: 0, correct: 0, attempts: 0 }
+      const nextDailyLog = {
+        ...prev.dailyLog,
+        [today]: {
+          xp: todayLog.xp + amount,
+          correct: todayLog.correct + (correct ? 1 : 0),
+          attempts: todayLog.attempts + (module ? 1 : 0),
+        },
+      }
+
+      // Limpa logs antigos (mantém últimos 365 dias)
+      const cutoff = new Date()
+      cutoff.setDate(cutoff.getDate() - 365)
+      const cutoffISO = cutoff.toISOString().slice(0, 10)
+      Object.keys(nextDailyLog).forEach(date => {
+        if (date < cutoffISO) delete nextDailyLog[date]
+      })
+
       const next = {
         ...prev,
         xp: Math.max(0, prev.xp + amount),
         totalCorrect: prev.totalCorrect + (correct ? 1 : 0),
         totalAttempts: prev.totalAttempts + (module ? 1 : 0),
         streak,
+        bestStreak: Math.max(prev.bestStreak || 0, streak),
         lastActiveDate: correct ? today : prev.lastActiveDate,
         perModule: nextModule,
+        dailyLog: nextDailyLog,
       }
 
       // Check for newly unlocked achievements
@@ -198,6 +222,10 @@ export function ProgressProvider({ children }) {
     setState(DEFAULT_STATE)
   }, [])
 
+  const setDailyGoal = useCallback((goal) => {
+    setState(prev => ({ ...prev, dailyGoal: goal }))
+  }, [])
+
   const level = useMemo(() => levelFromXP(state.xp), [state.xp])
   const xpInLevel = state.xp - xpForLevel(level)
   const xpToNext = xpForLevel(level + 1) - xpForLevel(level)
@@ -212,6 +240,7 @@ export function ProgressProvider({ children }) {
     newAchievements,
     dismissAchievement,
     resetProgress,
+    setDailyGoal,
   }
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>
