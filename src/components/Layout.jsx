@@ -1,4 +1,5 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import Logo from './Logo'
 import { Home, Layers, Gamepad2, Headphones, Blocks, BookOpen, LogOut, Mic, Trophy, Sun, Moon, Sparkles, BarChart3, Flame, Brain, PenLine, Music2, Video, GraduationCap, Settings as SettingsIcon, Bot } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useProgress } from '../contexts/ProgressContext'
@@ -47,7 +48,7 @@ export default function Layout() {
       {/* Sidebar desktop */}
       <aside className="hidden lg:flex w-72 flex-col border-r border-border-subtle bg-bg-base/80 backdrop-blur-xl sticky top-0 h-screen">
         <div className="p-6 flex items-center justify-between">
-          <Logo />
+          <LogoBadge />
           <button
             onClick={toggleTheme}
             className="p-2 rounded-lg hover:bg-bg-elevated text-gray-400 hover:text-white transition-colors"
@@ -116,7 +117,7 @@ export default function Layout() {
         {/* Mobile top bar */}
         <header className="lg:hidden sticky top-0 z-30 bg-bg-base/80 backdrop-blur-xl border-b border-border-subtle safe-pt">
           <div className="flex items-center justify-between px-5 py-4">
-            <Logo compact />
+            <LogoBadge compact />
             <div className="flex items-center gap-1.5">
               <div className="px-2.5 py-1 rounded-full bg-purple-950/40 border border-purple-800/40 text-xs font-semibold text-purple-300 font-mono">
                 Lv.{level} · {xp}XP
@@ -147,19 +148,17 @@ export default function Layout() {
   )
 }
 
-function Logo({ compact = false }) {
+function LogoBadge({ compact = false }) {
   return (
     <div className="flex items-center gap-2.5">
-      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-600 to-purple-900 flex items-center justify-center shadow-glow-sm">
-        <span className="text-white text-lg font-bold">L</span>
-      </div>
+      <Logo size={38} animated className="shadow-glow-sm rounded-xl" />
       {!compact && (
         <div>
-          <p className="text-white font-bold tracking-tight">LinguaFlow</p>
-          <p className="text-xs text-gray-500">English Trainer</p>
+          <p className="text-white font-bold tracking-tight">EnglishFlow</p>
+          <p className="text-xs text-gray-500">Aprenda com Sharky 🦈</p>
         </div>
       )}
-      {compact && <p className="text-white font-bold tracking-tight">LinguaFlow</p>}
+      {compact && <p className="text-white font-bold tracking-tight">EnglishFlow</p>}
     </div>
   )
 }

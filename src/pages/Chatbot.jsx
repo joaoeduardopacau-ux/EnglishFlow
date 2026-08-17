@@ -3,6 +3,7 @@ import { Bot, Send, RotateCw, ChevronLeft, Volume2, Lightbulb, User } from 'luci
 import { SCENARIOS, findResponse } from '../data/chatScenarios'
 import { useSpeech } from '../hooks/useSpeech'
 import { useProgress } from '../contexts/ProgressContext'
+import SharkMascot from '../components/SharkMascot'
 
 export default function Chatbot() {
   const [selected, setSelected] = useState(null)
@@ -13,14 +14,19 @@ export default function Chatbot() {
 
   return (
     <div className="max-w-5xl mx-auto px-5 lg:px-10 py-6 lg:py-10 space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-800 flex items-center justify-center shadow-glow-sm">
-          <Bot size={22} className="text-white" />
+      {/* Header com Sharky */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-800 flex items-center justify-center shadow-glow-sm">
+            <Bot size={22} className="text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl lg:text-3xl font-bold text-white">Conversation Practice</h1>
+            <p className="text-gray-400 text-sm">Pratique conversação com Sharky, seu AI Trainer 🦈</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-white">Conversation Practice</h1>
-          <p className="text-gray-400 text-sm">Pratique conversação com nosso AI Trainer</p>
+        <div className="hidden md:block">
+          <SharkMascot size={90} variant="thinking" animated />
         </div>
       </div>
 

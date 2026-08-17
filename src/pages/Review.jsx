@@ -5,6 +5,7 @@ import { useProgress } from '../contexts/ProgressContext'
 import { dictionary } from '../data/dictionary'
 import { Brain, Check, X, RotateCw, Clock, Award, ArrowLeft, Sparkles, Volume2 } from 'lucide-react'
 import { useSpeech } from '../hooks/useSpeech'
+import SharkMascot from '../components/SharkMascot'
 
 // Encontra dados da palavra no dictionary
 function findWord(key) {
@@ -75,7 +76,9 @@ export default function Review() {
     return (
       <div className="max-w-2xl mx-auto px-5 lg:px-10 py-6 lg:py-10">
         <div className="card-elevated p-8 text-center">
-          <div className="text-7xl mb-4">🎉</div>
+          <div className="flex justify-center mb-4">
+            <SharkMascot size={140} variant="celebrating" animated />
+          </div>
           <h1 className="text-3xl font-bold text-white mb-2">Sessão completa!</h1>
           <p className="text-gray-400 mb-6">Você revisou {session.total} palavra{session.total !== 1 ? 's' : ''}</p>
 

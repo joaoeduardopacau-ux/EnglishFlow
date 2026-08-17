@@ -5,6 +5,7 @@ import { useProgress } from '../contexts/ProgressContext'
 import { useFocus } from '../contexts/FocusContext'
 import { dictionary } from '../data/dictionary'
 import DailyGoalCard from '../components/DailyGoalCard'
+import SharkMascot from '../components/SharkMascot'
 
 const modules = [
   {
@@ -79,13 +80,19 @@ export default function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-900/50 via-bg-card to-bg-base border border-purple-800/30 p-6 lg:p-10">
         <div className="absolute -top-24 -right-24 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Mascote Sharky no canto */}
+        <div className="absolute -top-4 -right-4 lg:top-2 lg:right-4 opacity-90 pointer-events-none">
+          <SharkMascot size={140} variant="happy" animated />
+        </div>
+
         <div className="relative">
           <p className="text-purple-300/80 text-sm font-medium">Olá, {firstName} 👋</p>
           <h1 className="text-3xl lg:text-4xl font-bold text-gradient mt-2 tracking-tight">
             Pronto para aprender?
           </h1>
           <p className="text-gray-400 mt-2 max-w-lg">
-            Continue de onde parou ou escolha um novo módulo para hoje.
+            Continue de onde parou. Sharky está aqui pra te ajudar! 🦈
           </p>
 
           <div className="grid grid-cols-4 gap-3 mt-6 max-w-xl">
