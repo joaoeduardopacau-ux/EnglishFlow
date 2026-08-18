@@ -1,13 +1,13 @@
 {
-  "name": "EnglishFlow — English Trainer",
+  "name": "Sinceramente EnglishFlow",
   "short_name": "EnglishFlow",
-  "description": "Aprenda inglês com flashcards, jogos, listening, speaking e muito mais!",
+  "description": "Sinceramente EnglishFlow — aprenda inglês de forma real com flashcards, listening, speaking, jogos e muito mais.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#05080a",
-  "theme_color": "#764ba2",
+  "background_color": "#05070f",
+  "theme_color": "#0066ff",
   "lang": "pt-BR",
   "categories": ["education", "productivity"],
   "icons": [

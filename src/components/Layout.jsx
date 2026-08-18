@@ -151,14 +151,16 @@ export default function Layout() {
 function LogoBadge({ compact = false }) {
   return (
     <div className="flex items-center gap-2.5">
-      <Logo size={38} animated className="shadow-glow-sm rounded-xl" />
+      <Logo size={42} className="shadow-glow-sm" />
       {!compact && (
-        <div>
-          <p className="text-white font-bold tracking-tight">EnglishFlow</p>
-          <p className="text-xs text-gray-500">Aprenda com Sharky 🦈</p>
+        <div className="leading-tight">
+          <p className="text-white font-display font-bold tracking-tight text-[15px]">Sinceramente</p>
+          <p className="text-white font-display font-black tracking-tight text-[17px]">EnglishFlow</p>
         </div>
       )}
-      {compact && <p className="text-white font-bold tracking-tight">EnglishFlow</p>}
+      {compact && (
+        <p className="text-white font-display font-black tracking-tight">EnglishFlow</p>
+      )}
     </div>
   )
 }

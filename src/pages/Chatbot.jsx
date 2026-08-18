@@ -22,7 +22,7 @@ export default function Chatbot() {
           </div>
           <div>
             <h1 className="text-2xl lg:text-3xl font-bold text-white">Conversation Practice</h1>
-            <p className="text-gray-400 text-sm">Pratique conversação com Sharky, seu AI Trainer 🦈</p>
+            <p className="text-gray-400 text-sm">Pratique conversação com seu AI Trainer do EnglishFlow</p>
           </div>
         </div>
         <div className="hidden md:block">

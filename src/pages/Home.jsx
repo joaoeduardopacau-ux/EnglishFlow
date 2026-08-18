@@ -92,7 +92,7 @@ export default function Home() {
             Pronto para aprender?
           </h1>
           <p className="text-gray-400 mt-2 max-w-lg">
-            Continue de onde parou. Sharky está aqui pra te ajudar! 🦈
+            Continue de onde parou. <span className="font-marker text-purple-300">Flow your English.</span>
           </p>
 
           <div className="grid grid-cols-4 gap-3 mt-6 max-w-xl">

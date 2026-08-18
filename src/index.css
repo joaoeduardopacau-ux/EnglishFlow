@@ -5,30 +5,30 @@
 /* Theme tokens — dark (default) and light. Drive Tailwind bg-bg-* / border-* via CSS vars. */
 :root,
 :root[data-theme="dark"] {
-  --bg-base: #05080a;
-  --bg-card: #0f1418;
-  --bg-elevated: #161c20;
-  --bg-hover: #1c2328;
-  /* teal-500 = rgb(20,184,166) */
-  --border-subtle: rgba(20,184,166,0.14);
-  --border-default: rgba(20,184,166,0.28);
-  --border-bright: rgba(20,184,166,0.5);
-  --text-primary: #f1f1f5;
-  --text-muted: #9ca3af;
+  --bg-base: #05070f;
+  --bg-card: #0a0f2c;
+  --bg-elevated: #101838;
+  --bg-hover: #17204a;
+  /* accent = #0066FF */
+  --border-subtle: rgba(0,102,255,0.16);
+  --border-default: rgba(0,102,255,0.32);
+  --border-bright:  rgba(0,102,255,0.55);
+  --text-primary: #f1f4ff;
+  --text-muted: #8fa0c7;
   color-scheme: dark;
 }
 
 :root[data-theme="light"] {
-  --bg-base: #f4fbfa;
+  --bg-base: #f8f9fc;
   --bg-card: #ffffff;
-  --bg-elevated: #f7fdfc;
-  --bg-hover: #e9f7f5;
-  /* teal-600 = rgb(13,148,136) */
-  --border-subtle: rgba(13,148,136,0.18);
-  --border-default: rgba(13,148,136,0.30);
-  --border-bright: rgba(13,148,136,0.5);
-  --text-primary: #0e1a1d;
-  --text-muted: #526268;
+  --bg-elevated: #f1f4fb;
+  --bg-hover: #e4ecfb;
+  /* accent-600 = #0054d6 */
+  --border-subtle: rgba(0,84,214,0.15);
+  --border-default: rgba(0,84,214,0.28);
+  --border-bright:  rgba(0,84,214,0.5);
+  --text-primary: #0a0f2c;
+  --text-muted: #52607d;
   color-scheme: light;
 }
 
@@ -104,20 +104,26 @@
   body {
     background-color: var(--bg-base);
     color: var(--text-primary);
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
     overscroll-behavior: none;
     transition: background-color 250ms ease, color 250ms ease;
   }
 
-  /* Light theme: flip text-white/gray inside neutral surfaces (cards, headings, inputs).
+  /* Light theme: flip text-white/gray inside neutral surfaces (cards, headings, inputs, sidebar).
      We DON'T flip inside gradient/solid-colored buttons so white text stays readable
      on purple/emerald/red backgrounds. */
+  :root[data-theme="light"] aside .text-white,
+  :root[data-theme="light"] header .text-white,
   :root[data-theme="light"] .card .text-white,
   :root[data-theme="light"] .card-elevated .text-white,
   :root[data-theme="light"] .section-title,
   :root[data-theme="light"] .input,
   :root[data-theme="light"] main .text-white:not([class*="bg-gradient-to"]):not([class*="bg-purple"]):not([class*="bg-red"]):not([class*="bg-emerald"]):not([class*="bg-fuchsia"]):not([class*="bg-violet"]):not([class*="bg-indigo"]):not([class*="bg-amber"]):not([class*="bg-yellow"]) {
     color: var(--text-primary);
+  }
+  :root[data-theme="light"] aside .text-purple-300,
+  :root[data-theme="light"] aside .text-purple-400 {
+    color: #003fa3;
   }
   :root[data-theme="light"] .text-gray-400,
   :root[data-theme="light"] .text-gray-500,
@@ -139,12 +145,12 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(20, 184, 166, 0.32);
+    background: rgba(0, 102, 255, 0.35);
     border-radius: 999px;
   }
 
   ::selection {
-    background: rgba(20, 184, 166, 0.32);
+    background: rgba(0, 102, 255, 0.35);
     color: #fff;
   }
 }
@@ -253,12 +259,20 @@
     @apply bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent;
   }
 
+  :root[data-theme="light"] .text-gradient {
+    @apply from-purple-800 to-purple-500;
+  }
+
   .text-gradient-purple {
     @apply bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent;
   }
 
+  :root[data-theme="light"] .text-gradient-purple {
+    @apply from-purple-700 to-purple-500;
+  }
+
   .border-gradient {
-    border-image: linear-gradient(135deg, rgba(20,184,166,0.45), rgba(20,184,166,0.12)) 1;
+    border-image: linear-gradient(135deg, rgba(0,102,255,0.5), rgba(0,102,255,0.14)) 1;
   }
 
   .safe-pb {
