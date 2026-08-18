@@ -15,7 +15,6 @@ const navItems = [
   { to: '/review',       icon: 'bulb',        label: 'Revisão Diária' },
   { to: '/writing',      icon: 'notepad',     label: 'Writing' },
   { to: '/songs',        icon: 'headphones',  label: 'Músicas' },
-  { to: '/videos',       icon: 'video',       label: 'Vídeos' },
   { to: '/level-test',   icon: 'certificate', label: 'Teste de Nível' },
   { to: '/chatbot',      icon: 'chat',        label: 'AI Chatbot' },
   { to: '/leaderboard',  icon: 'trophy',      label: 'Ranking' },

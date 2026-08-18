@@ -1,5 +1,5 @@
-// Trechos de músicas famosas para prática (fair use — educacional)
-// As lacunas são palavras simples e comuns de ouvir
+// Trechos de músicas famosas para prática (fair use — educacional).
+// youtubeId aponta pro vídeo oficial no YouTube (embed player na página da música).
 export const SONGS = [
   {
     id: 'imagine',
@@ -10,6 +10,7 @@ export const SONGS = [
     genre: 'Rock',
     emoji: '☮️',
     color: 'from-amber-500 to-orange-700',
+    youtubeId: 'YkgkThdzX-8',
     lyrics: [
       { line: 'Imagine there\'s no {heaven}', translation: 'Imagine que não há paraíso', gaps: ['heaven'] },
       { line: 'It\'s easy if you {try}', translation: 'É fácil se você tentar', gaps: ['try'] },
@@ -28,6 +29,7 @@ export const SONGS = [
     genre: 'Rock',
     emoji: '🎸',
     color: 'from-blue-500 to-indigo-800',
+    youtubeId: 'QDYfEBY9NM4',
     lyrics: [
       { line: 'When I find myself in times of {trouble}', translation: 'Quando me encontro em tempos difíceis', gaps: ['trouble'] },
       { line: 'Mother Mary comes to {me}', translation: 'A mãe Maria vem até mim', gaps: ['me'] },
@@ -46,6 +48,7 @@ export const SONGS = [
     genre: 'Jazz',
     emoji: '🌍',
     color: 'from-emerald-500 to-teal-800',
+    youtubeId: 'VqhCQZaH4Vs',
     lyrics: [
       { line: 'I see trees of {green}', translation: 'Vejo árvores verdes', gaps: ['green'] },
       { line: 'Red roses {too}', translation: 'Rosas vermelhas também', gaps: ['too'] },
@@ -64,6 +67,7 @@ export const SONGS = [
     genre: 'Rock',
     emoji: '💫',
     color: 'from-purple-500 to-pink-700',
+    youtubeId: 'A_MjCqQoLLA',
     lyrics: [
       { line: 'Hey Jude, don\'t make it {bad}', translation: 'Ei Jude, não piore as coisas', gaps: ['bad'] },
       { line: 'Take a sad {song} and make it better', translation: 'Pegue uma canção triste e melhore-a', gaps: ['song'] },
@@ -82,6 +86,7 @@ export const SONGS = [
     genre: 'Rock',
     emoji: '📅',
     color: 'from-slate-600 to-slate-900',
+    youtubeId: 'NrgmdOz227I',
     lyrics: [
       { line: 'Yesterday, all my troubles seemed so far {away}', translation: 'Ontem, todos os meus problemas pareciam tão distantes', gaps: ['away'] },
       { line: 'Now it looks as though they\'re here to {stay}', translation: 'Agora parece que vieram para ficar', gaps: ['stay'] },
@@ -99,6 +104,7 @@ export const SONGS = [
     genre: 'Soul',
     emoji: '🤝',
     color: 'from-red-500 to-rose-800',
+    youtubeId: 'hwZNL7QVJjE',
     lyrics: [
       { line: 'When the {night} has come', translation: 'Quando a noite chegar', gaps: ['night'] },
       { line: 'And the land is {dark}', translation: 'E a terra estiver escura', gaps: ['dark'] },
@@ -108,3 +114,59 @@ export const SONGS = [
     ],
   },
 ]
+
+// Extract a YouTube video ID from any common URL/ID input.
+// Accepts: bare ID, youtu.be/xxx, youtube.com/watch?v=xxx, youtube.com/embed/xxx, m.youtube.com, shorts/xxx
+export function extractYouTubeId(input) {
+  if (!input) return null
+  const s = String(input).trim()
+  // Bare 11-char ID
+  if (/^[a-zA-Z0-9_-]{11}$/.test(s)) return s
+  const patterns = [
+    /(?:v=|\/embed\/|\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+  ]
+  for (const re of patterns) {
+    const m = s.match(re)
+    if (m) return m[1]
+  }
+  return null
+}
+
+// Parse a user-pasted lyrics block into { line, gaps, translation } items.
+// Format:
+//   English line with {palavra} marking a gap  |  tradução opcional em português
+//   Second line…                               |  Segunda tradução…
+// The " | " (pipe with spaces) separates English from Portuguese.
+// Multiple gaps per line are supported. Empty lines are skipped.
+export function parseLyrics(raw) {
+  if (!raw) return []
+  return raw
+    .split('\n')
+    .map(l => l.trim())
+    .filter(Boolean)
+    .map(row => {
+      const [enRaw, ptRaw = ''] = row.split(/\s*\|\s*/)
+      const gaps = [...enRaw.matchAll(/\{([^}]+)\}/g)].map(m => m[1])
+      return { line: enRaw, gaps, translation: ptRaw }
+    })
+    .filter(l => l.line.length > 0)
+}
+
+// Build a full song object ready to plug into <SongPractice>.
+export function buildUserSong({ title, artist, level, youtube, lyrics }) {
+  const youtubeId = extractYouTubeId(youtube)
+  const parsedLyrics = parseLyrics(lyrics)
+  return {
+    id: `user-${Date.now()}`,
+    title: (title || 'Sem título').trim(),
+    artist: (artist || 'Desconhecido').trim(),
+    year: null,
+    level: (level || 'A2').toUpperCase(),
+    genre: 'Minha música',
+    emoji: '🎵',
+    color: 'from-purple-600 to-blue-800',
+    youtubeId,
+    userCreated: true,
+    lyrics: parsedLyrics,
+  }
+}
