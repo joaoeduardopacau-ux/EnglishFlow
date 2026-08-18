@@ -23,7 +23,6 @@ import StreakCalendar from './pages/StreakCalendar'
 import Review from './pages/Review'
 import Writing from './pages/Writing'
 import Songs from './pages/Songs'
-import Videos from './pages/Videos'
 import LevelTest from './pages/LevelTest'
 import Settings from './pages/Settings'
 import Leaderboard from './pages/Leaderboard'
@@ -79,7 +78,6 @@ export default function App() {
                     <Route path="review" element={<Review />} />
                     <Route path="writing" element={<Writing />} />
                     <Route path="songs" element={<Songs />} />
-                    <Route path="videos" element={<Videos />} />
                     <Route path="level-test" element={<LevelTest />} />
                     <Route path="settings" element={<Settings />} />
                     <Route path="leaderboard" element={<Leaderboard />} />
