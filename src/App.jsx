@@ -40,9 +40,11 @@ function LoadingScreen() {
   return (
     <div className="min-h-screen bg-bg-base flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-700 to-purple-500 flex items-center justify-center shadow-glow animate-pulse-slow">
-          <span className="text-2xl">🌊</span>
-        </div>
+        <img
+          src="/icon-source.png"
+          alt="EnglishFlow"
+          className="w-16 h-16 rounded-2xl shadow-glow animate-pulse-slow object-cover"
+        />
         <div className="w-32 h-1 bg-bg-elevated rounded-full overflow-hidden">
           <div className="h-full bg-gradient-to-r from-purple-700 to-purple-400 rounded-full animate-[loading_1.5s_ease-in-out_infinite]" />
         </div>

@@ -10,20 +10,20 @@ export default {
           elevated: 'var(--bg-elevated)',
           hover: 'var(--bg-hover)',
         },
-        // NB: Class names are still `purple-*` for historical reasons, but the
-        // hex palette is Tailwind's teal. Swap these hex values to rebrand.
+        // Class names ainda são `purple-*` por compatibilidade histórica,
+        // mas os hex são a paleta azul do Sinceramente EnglishFlow (#0066FF / #3DA5FF).
         purple: {
-          50: '#f0fdfa',
-          100: '#ccfbf1',
-          200: '#99f6e4',
-          300: '#5eead4',
-          400: '#2dd4bf',
-          500: '#14b8a6',
-          600: '#0d9488',
-          700: '#0f766e',
-          800: '#115e59',
-          900: '#134e4a',
-          950: '#042f2e',
+          50:  '#eef4ff',
+          100: '#dbe8ff',
+          200: '#b8d1ff',
+          300: '#8fb6ff',
+          400: '#5b93ff',
+          500: '#3da5ff',
+          600: '#0066ff',
+          700: '#0054d6',
+          800: '#003fa3',
+          900: '#0a0f2c',
+          950: '#050914',
         },
         border: {
           subtle: 'var(--border-subtle)',
@@ -32,14 +32,16 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"Segoe UI"', 'system-ui', 'sans-serif'],
+        sans: ['"Poppins"', '-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"Segoe UI"', 'system-ui', 'sans-serif'],
+        display: ['"Orbitron"', '"Poppins"', 'system-ui', 'sans-serif'],
+        marker: ['"Permanent Marker"', 'cursive'],
       },
       boxShadow: {
-        // Teal glow — rgb(20,184,166) is teal-500.
-        'glow-sm': '0 0 15px rgba(20,184,166,0.22)',
-        'glow': '0 0 30px rgba(20,184,166,0.32)',
-        'glow-lg': '0 0 60px rgba(20,184,166,0.28)',
-        'card': '0 4px 24px rgba(0,0,0,0.4)',
+        // Azul-neon: #0066FF
+        'glow-sm': '0 0 15px rgba(0,102,255,0.28)',
+        'glow':    '0 0 30px rgba(0,102,255,0.36)',
+        'glow-lg': '0 0 60px rgba(0,102,255,0.32)',
+        'card':    '0 4px 24px rgba(0,0,0,0.4)',
       },
       backdropBlur: {
         xs: '4px',

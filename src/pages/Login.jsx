@@ -30,12 +30,18 @@ export default function Login() {
 
       <div className="relative w-full max-w-md">
         {/* Logo */}
-        <div className="flex flex-col items-center mb-10">
-          <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-purple-500 via-purple-700 to-purple-900 flex items-center justify-center shadow-glow-lg mb-6 animate-float">
-            <span className="text-white text-4xl font-bold tracking-tighter">L</span>
-          </div>
-          <h1 className="text-4xl font-bold text-gradient tracking-tight">LinguaFlow</h1>
-          <p className="text-gray-400 mt-2 text-center">Aprenda inglês do seu jeito.</p>
+        <div className="flex flex-col items-center mb-8">
+          <img
+            src="/icon-source.png"
+            alt="EnglishFlow"
+            className="w-24 h-24 rounded-3xl object-cover shadow-glow-lg mb-4 animate-float"
+          />
+          <img
+            src="/wordmark.png"
+            alt="Sinceramente EnglishFlow"
+            className="h-24 w-auto max-w-[320px] object-contain drop-shadow-[0_0_18px_rgba(0,102,255,0.35)]"
+          />
+          <p className="text-gray-400 mt-3 text-center font-marker text-lg">Flow your English. Own your future.</p>
         </div>
 
         {/* Card */}
