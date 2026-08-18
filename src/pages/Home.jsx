@@ -1,69 +1,22 @@
 import { Link } from 'react-router-dom'
-import { Layers, Gamepad2, Headphones, Blocks, BookOpen, Flame, TrendingUp, Trophy, Mic, Sparkles, ArrowRight, BarChart3 } from 'lucide-react'
+import { Flame, TrendingUp, Trophy, BookOpen, ArrowRight } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useProgress } from '../contexts/ProgressContext'
 import { useFocus } from '../contexts/FocusContext'
 import { dictionary } from '../data/dictionary'
 import DailyGoalCard from '../components/DailyGoalCard'
 import SharkMascot from '../components/SharkMascot'
+import NavIcon from '../components/NavIcon'
 
 const modules = [
-  {
-    to: '/flashcards',
-    icon: Layers,
-    title: 'Flashcards',
-    desc: 'Aprenda palavras com cartões interativos',
-    gradient: 'from-purple-700 to-purple-900',
-  },
-  {
-    to: '/listening',
-    icon: Headphones,
-    title: 'Listening',
-    desc: 'Treine seu ouvido com áudios em inglês',
-    gradient: 'from-violet-600 to-purple-800',
-  },
-  {
-    to: '/speaking',
-    icon: Mic,
-    title: 'Speaking',
-    desc: 'Pratique pronúncia em voz alta',
-    gradient: 'from-fuchsia-600 to-pink-800',
-  },
-  {
-    to: '/builder',
-    icon: Blocks,
-    title: 'Montar Frase',
-    desc: 'Construa frases em inglês a partir do português',
-    gradient: 'from-fuchsia-700 to-purple-900',
-  },
-  {
-    to: '/games',
-    icon: Gamepad2,
-    title: 'Jogos',
-    desc: 'Pratique com mini-jogos didáticos',
-    gradient: 'from-purple-600 to-indigo-900',
-  },
-  {
-    to: '/dictionary',
-    icon: BookOpen,
-    title: 'Dicionário',
-    desc: 'Explore todo o vocabulário do app',
-    gradient: 'from-purple-800 to-slate-900',
-  },
-  {
-    to: '/dashboard',
-    icon: BarChart3,
-    title: 'Dashboard',
-    desc: 'Veja gráficos e estatísticas do seu progresso',
-    gradient: 'from-emerald-600 to-teal-800',
-  },
-  {
-    to: '/achievements',
-    icon: Trophy,
-    title: 'Conquistas',
-    desc: 'Veja seu progresso e badges',
-    gradient: 'from-amber-600 to-yellow-800',
-  },
+  { to: '/flashcards',   icon: 'bookmark',   title: 'Flashcards',  desc: 'Aprenda palavras com cartões interativos' },
+  { to: '/listening',    icon: 'headphones', title: 'Listening',   desc: 'Treine seu ouvido com áudios em inglês' },
+  { to: '/speaking',     icon: 'mic',        title: 'Speaking',    desc: 'Pratique pronúncia em voz alta' },
+  { to: '/builder',      icon: 'translate',  title: 'Montar Frase',desc: 'Construa frases em inglês a partir do português' },
+  { to: '/games',        icon: 'gamepad',    title: 'Jogos',       desc: 'Pratique com mini-jogos didáticos' },
+  { to: '/dictionary',   icon: 'book',       title: 'Dicionário',  desc: 'Explore todo o vocabulário do app' },
+  { to: '/dashboard',    icon: 'chart',      title: 'Dashboard',   desc: 'Veja gráficos e estatísticas do seu progresso' },
+  { to: '/achievements', icon: 'medal',      title: 'Conquistas',  desc: 'Veja seu progresso e badges' },
 ]
 
 export default function Home() {
@@ -116,8 +69,8 @@ export default function Home() {
           className="block card-elevated p-5 lg:p-6 hover:border-border-bright hover:shadow-glow-sm transition-all group"
         >
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-fuchsia-800 flex items-center justify-center shadow-glow-sm shrink-0 group-hover:scale-110 transition-transform">
-              <Sparkles size={22} className="text-white" />
+            <div className="w-14 h-14 shrink-0 group-hover:scale-110 transition-transform">
+              <NavIcon name="target" size={56} />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-2">
@@ -148,14 +101,14 @@ export default function Home() {
         <p className="section-subtitle">Escolha uma atividade para começar</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
-          {modules.map(({ to, icon: Icon, title, desc, gradient }) => (
+          {modules.map(({ to, icon, title, desc }) => (
             <Link
               key={to}
               to={to}
               className="group card p-5 hover:border-border-bright hover:shadow-glow-sm transition-all duration-300"
             >
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform`}>
-                <Icon size={22} className="text-white" />
+              <div className="mb-4 group-hover:scale-110 transition-transform inline-block">
+                <NavIcon name={icon} size={64} />
               </div>
               <h3 className="text-lg font-semibold text-white">{title}</h3>
               <p className="text-sm text-gray-400 mt-1">{desc}</p>

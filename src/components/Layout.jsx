@@ -1,40 +1,42 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import Logo from './Logo'
-import { Home, Layers, Gamepad2, Headphones, Blocks, BookOpen, LogOut, Mic, Trophy, Sun, Moon, Sparkles, BarChart3, Flame, Brain, PenLine, Music2, Video, GraduationCap, Settings as SettingsIcon, Bot } from 'lucide-react'
+import NavIcon from './NavIcon'
+import { LogOut, Sun, Moon } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useProgress } from '../contexts/ProgressContext'
 import { useTheme } from '../contexts/ThemeContext'
 import BottomNav from './BottomNav'
 
+// Cada item aponta pra um ícone em public/nav/*.png (via NavIcon)
 const navItems = [
-  { to: '/', icon: Home, label: 'Início' },
-  { to: '/dashboard', icon: BarChart3, label: 'Dashboard' },
-  { to: '/streak', icon: Flame, label: 'Streak Calendar' },
-  { to: '/review', icon: Brain, label: 'Revisão Diária' },
-  { to: '/writing', icon: PenLine, label: 'Writing' },
-  { to: '/songs', icon: Music2, label: 'Músicas' },
-  { to: '/videos', icon: Video, label: 'Vídeos' },
-  { to: '/level-test', icon: GraduationCap, label: 'Teste de Nível' },
-  { to: '/chatbot', icon: Bot, label: 'AI Chatbot' },
-  { to: '/leaderboard', icon: Trophy, label: 'Ranking' },
-  { to: '/settings', icon: SettingsIcon, label: 'Configurações' },
-  { to: '/learn', icon: Sparkles, label: 'Foco de Estudo' },
-  { to: '/flashcards', icon: Layers, label: 'Flashcards' },
-  { to: '/games', icon: Gamepad2, label: 'Jogos' },
-  { to: '/listening', icon: Headphones, label: 'Listening' },
-  { to: '/speaking', icon: Mic, label: 'Speaking' },
-  { to: '/builder', icon: Blocks, label: 'Montar Frase' },
-  { to: '/dictionary', icon: BookOpen, label: 'Dicionário' },
-  { to: '/achievements', icon: Trophy, label: 'Conquistas' },
+  { to: '/',             icon: 'home',        label: 'Início' },
+  { to: '/dashboard',    icon: 'chart',       label: 'Dashboard' },
+  { to: '/streak',       icon: 'flame',       label: 'Streak Calendar' },
+  { to: '/review',       icon: 'bulb',        label: 'Revisão Diária' },
+  { to: '/writing',      icon: 'notepad',     label: 'Writing' },
+  { to: '/songs',        icon: 'headphones',  label: 'Músicas' },
+  { to: '/videos',       icon: 'video',       label: 'Vídeos' },
+  { to: '/level-test',   icon: 'certificate', label: 'Teste de Nível' },
+  { to: '/chatbot',      icon: 'chat',        label: 'AI Chatbot' },
+  { to: '/leaderboard',  icon: 'trophy',      label: 'Ranking' },
+  { to: '/settings',     icon: 'gear',        label: 'Configurações' },
+  { to: '/learn',        icon: 'target',      label: 'Foco de Estudo' },
+  { to: '/flashcards',   icon: 'bookmark',    label: 'Flashcards' },
+  { to: '/games',        icon: 'gamepad',     label: 'Jogos' },
+  { to: '/listening',    icon: 'headphones',  label: 'Listening' },
+  { to: '/speaking',     icon: 'mic',         label: 'Speaking' },
+  { to: '/builder',      icon: 'translate',   label: 'Montar Frase' },
+  { to: '/dictionary',   icon: 'book',        label: 'Dicionário' },
+  { to: '/achievements', icon: 'medal',       label: 'Conquistas' },
 ]
 
 // Bottom nav on mobile — keep it to 5 most-used items
 const bottomNavItems = [
-  { to: '/', icon: Home, label: 'Início' },
-  { to: '/learn', icon: Sparkles, label: 'Foco' },
-  { to: '/flashcards', icon: Layers, label: 'Cards' },
-  { to: '/listening', icon: Headphones, label: 'Ouvir' },
-  { to: '/speaking', icon: Mic, label: 'Falar' },
+  { to: '/',           icon: 'home',       label: 'Início' },
+  { to: '/learn',      icon: 'target',     label: 'Foco' },
+  { to: '/flashcards', icon: 'bookmark',   label: 'Cards' },
+  { to: '/listening',  icon: 'headphones', label: 'Ouvir' },
+  { to: '/speaking',   icon: 'mic',        label: 'Falar' },
 ]
 
 export default function Layout() {
@@ -75,21 +77,21 @@ export default function Layout() {
             )}
           </div>
         </div>
-        <nav className="flex-1 px-3 space-y-1">
-          {navItems.map(({ to, icon: Icon, label }) => (
+        <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
+          {navItems.map(({ to, icon, label }) => (
             <NavLink
               key={to}
               to={to}
               end={to === '/'}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                `flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 ${
                   isActive
                     ? 'bg-purple-950/40 text-white shadow-glow-sm border border-purple-800/40'
                     : 'text-gray-400 hover:text-white hover:bg-bg-elevated'
                 }`
               }
             >
-              <Icon size={20} />
+              <NavIcon name={icon} size={26} />
               <span className="font-medium">{label}</span>
             </NavLink>
           ))}

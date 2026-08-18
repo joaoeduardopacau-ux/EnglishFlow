@@ -19,16 +19,16 @@
 }
 
 :root[data-theme="light"] {
-  --bg-base: #f8f9fc;
+  --bg-base: #eef2fb;
   --bg-card: #ffffff;
-  --bg-elevated: #f1f4fb;
-  --bg-hover: #e4ecfb;
+  --bg-elevated: #f6f8ff;
+  --bg-hover: #e0e8fa;
   /* accent-600 = #0054d6 */
-  --border-subtle: rgba(0,84,214,0.15);
-  --border-default: rgba(0,84,214,0.28);
-  --border-bright:  rgba(0,84,214,0.5);
+  --border-subtle: rgba(0,84,214,0.14);
+  --border-default: rgba(0,84,214,0.24);
+  --border-bright:  rgba(0,84,214,0.42);
   --text-primary: #0a0f2c;
-  --text-muted: #52607d;
+  --text-muted: #4b5c7f;
   color-scheme: light;
 }
 
@@ -109,9 +109,8 @@
     transition: background-color 250ms ease, color 250ms ease;
   }
 
-  /* Light theme: flip text-white/gray inside neutral surfaces (cards, headings, inputs, sidebar).
-     We DON'T flip inside gradient/solid-colored buttons so white text stays readable
-     on purple/emerald/red backgrounds. */
+  /* --- Light theme overrides --- */
+  /* Neutral surfaces (sidebar, header, cards, main text) flip white/gray → primary. */
   :root[data-theme="light"] aside .text-white,
   :root[data-theme="light"] header .text-white,
   :root[data-theme="light"] .card .text-white,
@@ -121,10 +120,21 @@
   :root[data-theme="light"] main .text-white:not([class*="bg-gradient-to"]):not([class*="bg-purple"]):not([class*="bg-red"]):not([class*="bg-emerald"]):not([class*="bg-fuchsia"]):not([class*="bg-violet"]):not([class*="bg-indigo"]):not([class*="bg-amber"]):not([class*="bg-yellow"]) {
     color: var(--text-primary);
   }
+  /* Purple accents outside dark cards → readable blue. */
+  :root[data-theme="light"] aside .text-purple-200,
   :root[data-theme="light"] aside .text-purple-300,
-  :root[data-theme="light"] aside .text-purple-400 {
-    color: #003fa3;
+  :root[data-theme="light"] aside .text-purple-400,
+  :root[data-theme="light"] header .text-purple-200,
+  :root[data-theme="light"] header .text-purple-300,
+  :root[data-theme="light"] header .text-purple-400,
+  :root[data-theme="light"] main .card .text-purple-200,
+  :root[data-theme="light"] main .card .text-purple-300,
+  :root[data-theme="light"] main .card .text-purple-400,
+  :root[data-theme="light"] main .card-elevated .text-purple-300,
+  :root[data-theme="light"] main .card-elevated .text-purple-400 {
+    color: #0054d6;
   }
+  /* Gray tones near-white → muted */
   :root[data-theme="light"] .text-gray-400,
   :root[data-theme="light"] .text-gray-500,
   :root[data-theme="light"] .text-gray-600 {
@@ -132,7 +142,32 @@
   }
   :root[data-theme="light"] .text-gray-200,
   :root[data-theme="light"] .text-gray-300 {
-    color: #2d2650;
+    color: #1a2340;
+  }
+  /* Hero cards: swap the dark radial gradient for a soft blue wash. */
+  :root[data-theme="light"] section.rounded-3xl.bg-gradient-to-br.from-purple-900\/50,
+  :root[data-theme="light"] .card.rounded-3xl.bg-gradient-to-br.from-purple-900\/50 {
+    background: linear-gradient(135deg, #e3edff 0%, #ffffff 55%, #f6f8ff 100%) !important;
+    border-color: rgba(0,84,214,0.20) !important;
+  }
+  /* Faded purple badges (bg-purple-950/40 …) on light bg → soft blue chip */
+  :root[data-theme="light"] .bg-purple-950\/40,
+  :root[data-theme="light"] .bg-purple-950\/50,
+  :root[data-theme="light"] .bg-purple-950\/60 {
+    background-color: rgba(0,102,255,0.12) !important;
+  }
+  :root[data-theme="light"] .border-purple-800\/30,
+  :root[data-theme="light"] .border-purple-800\/40,
+  :root[data-theme="light"] .border-purple-800\/50 {
+    border-color: rgba(0,84,214,0.28) !important;
+  }
+  /* Bg-elevated/60 chip in Stat tiles */
+  :root[data-theme="light"] .bg-bg-elevated\/60 {
+    background-color: rgba(255,255,255,0.85) !important;
+  }
+  /* Foco de estudo accent tile: keep gradient on dark; on light use solid blue */
+  :root[data-theme="light"] .bg-gradient-to-br.from-purple-600.to-fuchsia-800 {
+    background: linear-gradient(135deg, #0066ff, #003fa3) !important;
   }
 
   ::-webkit-scrollbar {
