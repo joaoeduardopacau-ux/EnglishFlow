@@ -4,12 +4,16 @@
 //   pron = pronoun      conj = conjunction   interj = interjection
 //   aux = auxiliary     num = number         phrase = phrase
 
-let __id = 0
+import { extraDictionary } from './dictionary-extra.js'
+import { extraDictionary2 } from './dictionary-extra-2.js'
+import { extraDictionary3 } from './dictionary-extra-3.js'
+import { extraDictionary4 } from './dictionary-extra-4.js'
+
 const w = (word, translation, pos, level, category, example) => ({
-  id: ++__id, word, translation, pos, level, category, example,
+  word, translation, pos, level, category, example,
 })
 
-export const dictionary = [
+const coreDictionary = [
   // ── PRONOUNS / DETERMINERS ──
   w('I', 'eu', 'pron', 'Ini-1', 'grammar', 'I am a student.'),
   w('you', 'você / vocês', 'pron', 'Ini-1', 'grammar', 'You are my friend.'),
@@ -858,22 +862,51 @@ export const dictionary = [
   w('might', 'pode (possibilidade)', 'aux', 'Inter-2', 'grammar', 'It might rain.'),
 ]
 
+// Merge core + extras. Dedupe pelo par (word+category) — mesma palavra pode
+// existir em categorias diferentes (por ex. "cook" como verbo E profissão).
+function dedupeAndId(...lists) {
+  const seen = new Set()
+  const out = []
+  let id = 0
+  for (const list of lists) {
+    for (const item of list) {
+      const key = `${item.word.toLowerCase()}::${item.category}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      out.push({ ...item, id: ++id })
+    }
+  }
+  return out
+}
+
+export const dictionary = dedupeAndId(coreDictionary, extraDictionary, extraDictionary2, extraDictionary3, extraDictionary4)
+
 export const categories = [
   { id: 'all', label: 'Todos', emoji: '📚' },
   { id: 'animals', label: 'Animais', emoji: '🐾' },
   { id: 'food', label: 'Comida', emoji: '🍎' },
+  { id: 'kitchen', label: 'Cozinha', emoji: '🍳' },
   { id: 'colors', label: 'Cores', emoji: '🎨' },
   { id: 'body', label: 'Corpo', emoji: '🫀' },
+  { id: 'health', label: 'Saúde', emoji: '⚕️' },
+  { id: 'feelings', label: 'Sentimentos', emoji: '💭' },
   { id: 'house', label: 'Casa', emoji: '🏠' },
   { id: 'clothes', label: 'Roupas', emoji: '👕' },
   { id: 'time', label: 'Tempo', emoji: '⏰' },
+  { id: 'weather', label: 'Clima', emoji: '🌦️' },
   { id: 'verbs', label: 'Verbos', emoji: '⚡' },
+  { id: 'phrasal', label: 'Phrasal Verbs', emoji: '🔗' },
   { id: 'adjectives', label: 'Adjetivos', emoji: '✨' },
   { id: 'places', label: 'Lugares', emoji: '📍' },
+  { id: 'travel', label: 'Viagem', emoji: '✈️' },
   { id: 'transport', label: 'Transporte', emoji: '🚗' },
+  { id: 'sports', label: 'Esportes', emoji: '⚽' },
+  { id: 'shopping', label: 'Compras', emoji: '🛒' },
+  { id: 'entertainment', label: 'Entretenimento', emoji: '🎬' },
   { id: 'family', label: 'Família', emoji: '👨‍👩‍👧' },
   { id: 'people', label: 'Pessoas', emoji: '🧑' },
   { id: 'jobs', label: 'Profissões', emoji: '💼' },
+  { id: 'office', label: 'Escritório', emoji: '🗂️' },
   { id: 'nature', label: 'Natureza', emoji: '🌿' },
   { id: 'tech', label: 'Tecnologia', emoji: '💻' },
   { id: 'education', label: 'Educação', emoji: '🎓' },
