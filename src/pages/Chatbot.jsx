@@ -1,73 +1,92 @@
 import { useState, useEffect, useRef } from 'react'
-import { Bot, Send, RotateCw, ChevronLeft, Volume2, Lightbulb, User } from 'lucide-react'
+import { Bot, Send, RotateCw, ChevronLeft, Volume2, Lightbulb, User, Search } from 'lucide-react'
 import { SCENARIOS, findResponse } from '../data/chatScenarios'
 import { useSpeech } from '../hooks/useSpeech'
 import { useProgress } from '../contexts/ProgressContext'
-import SharkMascot from '../components/SharkMascot'
+
+const LEVELS = ['Todos', 'A1', 'A2', 'B1', 'B2', 'C1']
 
 export default function Chatbot() {
   const [selected, setSelected] = useState(null)
+  const [q, setQ] = useState('')
+  const [level, setLevel] = useState('Todos')
 
   if (selected) {
     return <ChatSession scenario={selected} onBack={() => setSelected(null)} />
   }
 
+  const filtered = SCENARIOS.filter(s => {
+    if (level !== 'Todos' && s.level !== level) return false
+    if (q && !s.title.toLowerCase().includes(q.toLowerCase())) return false
+    return true
+  })
+
   return (
-    <div className="max-w-5xl mx-auto px-5 lg:px-10 py-6 lg:py-10 space-y-6">
-      {/* Header com Sharky */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-800 flex items-center justify-center shadow-glow-sm">
-            <Bot size={22} className="text-white" />
-          </div>
-          <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-white">Conversation Practice</h1>
-            <p className="text-gray-400 text-sm">Pratique conversação com seu AI Trainer do EnglishFlow</p>
-          </div>
+    <div className="max-w-5xl mx-auto px-5 lg:px-10 pt-6 pb-10 lg:pt-8 lg:pb-16 space-y-6">
+      {/* Header */}
+      <header>
+        <p className="kbd">Conversation Practice</p>
+        <h1 className="text-3xl lg:text-4xl font-display font-bold text-white tracking-tight mt-1">
+          Converse em inglês
+        </h1>
+        <p className="text-sm text-gray-500 mt-1">
+          Escolha um cenário e pratique diálogos reais com seu AI Trainer
+        </p>
+      </header>
+
+      {/* Filtros */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Buscar cenário..."
+            className="input !pl-10"
+          />
         </div>
-        <div className="hidden md:block">
-          <SharkMascot size={90} variant="thinking" animated />
+        <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
+          {LEVELS.map(l => (
+            <button
+              key={l}
+              onClick={() => setLevel(l)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold border whitespace-nowrap transition-colors ${
+                level === l ? 'bg-blue-500/15 border-blue-500/40 text-blue-300' : 'bg-bg-elevated border-border-subtle text-gray-400 hover:text-white'
+              }`}
+            >{l}</button>
+          ))}
         </div>
       </div>
 
       {/* Scenarios grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {SCENARIOS.map(scenario => (
-          <button
-            key={scenario.id}
-            onClick={() => setSelected(scenario)}
-            className="group card-elevated overflow-hidden text-left hover:border-purple-500 transition-all"
-          >
-            <div className={`bg-gradient-to-br ${scenario.color} p-6 relative`}>
-              <div className="text-5xl">{scenario.emoji}</div>
-              <span className="absolute top-3 right-3 px-2 py-1 bg-white/20 rounded-md text-xs font-bold text-white">
-                {scenario.level}
-              </span>
-            </div>
-            <div className="p-4">
-              <h3 className="text-lg font-bold text-white">{scenario.title}</h3>
-              <p className="text-sm text-gray-400 mt-1">{scenario.description}</p>
-              <p className="text-xs text-purple-300 mt-3 font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+      {filtered.length === 0 ? (
+        <div className="card p-10 text-center text-gray-500 text-sm">
+          <Bot size={32} className="mx-auto mb-3 opacity-40" />
+          Nenhum cenário encontrado. Ajuste os filtros.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {filtered.map(scenario => (
+            <button
+              key={scenario.id}
+              onClick={() => setSelected(scenario)}
+              className="group card p-5 text-left hover:border-blue-500/40 hover:-translate-y-0.5 transition-all"
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div className="text-4xl">{scenario.emoji}</div>
+                <span className="px-2 py-0.5 rounded-md bg-bg-elevated border border-border-subtle text-[10px] font-bold text-gray-300">
+                  {scenario.level}
+                </span>
+              </div>
+              <h3 className="text-base font-semibold text-white">{scenario.title}</h3>
+              <p className="text-xs text-gray-500 mt-1 leading-snug line-clamp-2">{scenario.description}</p>
+              <p className="text-xs text-blue-400 mt-3 font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
                 Começar conversa →
               </p>
-            </div>
-          </button>
-        ))}
-      </div>
-
-      {/* Info */}
-      <div className="card p-5">
-        <div className="flex items-start gap-3">
-          <div className="text-2xl">🤖</div>
-          <div>
-            <p className="text-white font-semibold">Como funciona?</p>
-            <p className="text-sm text-gray-400 mt-1">
-              Escolha um cenário e converse em inglês. O bot vai responder de forma natural,
-              te ajudando a praticar conversação em situações reais!
-            </p>
-          </div>
+            </button>
+          ))}
         </div>
-      </div>
+      )}
     </div>
   )
 }
@@ -127,34 +146,35 @@ function ChatSession({ scenario, onBack }) {
       {/* Back */}
       <button
         onClick={onBack}
-        className="flex items-center gap-1 text-purple-300 hover:text-purple-200 mb-4 text-sm shrink-0"
+        className="flex items-center gap-1 text-blue-300 hover:text-blue-200 mb-4 text-sm shrink-0"
       >
         <ChevronLeft size={16} /> Voltar aos cenários
       </button>
 
       {/* Header do chat */}
-      <div className={`card-elevated overflow-hidden shrink-0`}>
-        <div className={`bg-gradient-to-br ${scenario.color} p-4`}>
-          <div className="flex items-center gap-3">
-            <div className="text-3xl">{scenario.emoji}</div>
-            <div className="flex-1">
-              <h2 className="text-lg font-bold text-white">{scenario.title}</h2>
-              <p className="text-xs text-white/80">{scenario.context}</p>
-            </div>
-            <button
-              onClick={handleReset}
-              className="p-2 rounded-lg bg-white/20 hover:bg-white/30 text-white transition-colors"
-              title="Reiniciar conversa"
-            >
-              <RotateCw size={16} />
-            </button>
+      <div className="card overflow-hidden shrink-0">
+        <div className="p-4 flex items-center gap-3 border-b border-border-subtle">
+          <div className="text-3xl shrink-0">{scenario.emoji}</div>
+          <div className="flex-1 min-w-0">
+            <h2 className="text-base font-semibold text-white truncate">{scenario.title}</h2>
+            <p className="text-xs text-gray-500 truncate">{scenario.context}</p>
           </div>
+          <span className="px-2 py-0.5 rounded-md bg-bg-elevated border border-border-subtle text-[10px] font-bold text-gray-300">
+            {scenario.level}
+          </span>
+          <button
+            onClick={handleReset}
+            className="p-2 rounded-lg text-gray-500 hover:text-white hover:bg-bg-elevated transition-colors"
+            title="Reiniciar conversa"
+          >
+            <RotateCw size={16} />
+          </button>
         </div>
 
         {/* Tips */}
-        <div className="p-3 border-b border-border-subtle">
+        <div className="p-3">
           <div className="flex items-start gap-2">
-            <Lightbulb size={14} className="text-yellow-400 shrink-0 mt-0.5" />
+            <Lightbulb size={14} className="text-amber-400 shrink-0 mt-0.5" />
             <div className="text-xs text-gray-400 space-y-1">
               {scenario.tips.map((tip, i) => (
                 <p key={i}>💡 {tip}</p>
@@ -204,27 +224,27 @@ function MessageBubble({ msg, onSpeak }) {
   return (
     <div className={`flex items-end gap-2 ${isBot ? 'justify-start' : 'justify-end'}`}>
       {isBot && (
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-800 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shrink-0">
           <Bot size={14} className="text-white" />
         </div>
       )}
       <div className={`max-w-[75%] rounded-2xl px-4 py-2.5 ${
         isBot
           ? 'bg-bg-elevated border border-border-subtle rounded-bl-sm'
-          : 'bg-gradient-to-br from-purple-600 to-fuchsia-800 rounded-br-sm shadow-glow-sm'
+          : 'bg-blue-600 rounded-br-sm'
       }`}>
         <p className="text-white leading-relaxed">{msg.text}</p>
         {isBot && (
           <button
             onClick={onSpeak}
-            className="mt-1 text-xs text-purple-300 hover:text-purple-200 flex items-center gap-1"
+            className="mt-1 text-xs text-blue-300 hover:text-blue-200 flex items-center gap-1"
           >
             <Volume2 size={10} /> Ouvir
           </button>
         )}
       </div>
       {!isBot && (
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-purple-800 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center shrink-0">
           <User size={14} className="text-white" />
         </div>
       )}
@@ -235,7 +255,7 @@ function MessageBubble({ msg, onSpeak }) {
 function TypingIndicator() {
   return (
     <div className="flex items-end gap-2 justify-start">
-      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-800 flex items-center justify-center shrink-0">
+      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shrink-0">
         <Bot size={14} className="text-white" />
       </div>
       <div className="bg-bg-elevated border border-border-subtle rounded-2xl rounded-bl-sm px-4 py-3">

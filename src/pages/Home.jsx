@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useMemo } from 'react'
-import { Sparkles, Palette, Trophy, Zap, ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useProgress, ACHIEVEMENTS } from '../contexts/ProgressContext'
 import { useFocus } from '../contexts/FocusContext'
@@ -16,13 +16,6 @@ const practiceModules = [
   { to: '/games',      icon: 'gamepad',    title: 'Jogos',        sub: 'Aprenda se divertindo', highlight: true },
   { to: '/builder',    icon: 'translate',  title: 'Montar Frase', sub: 'Monte frases e fixe o conteúdo' },
   { to: '/dictionary', icon: 'book',       title: 'Dicionário',   sub: 'Pesquise e aprenda novas palavras' },
-]
-
-const featureCallouts = [
-  { icon: 'mountain', title: 'Visual moderno',        desc: 'Lobo-guará como símbolo de foco e determinação' },
-  { icon: 'flow',     title: 'Experiência fluida',     desc: 'Navegação intuitiva e fácil de usar' },
-  { icon: 'game',     title: 'Gamificação',            desc: 'Progresso, desafios e conquistas que motivam' },
-  { icon: 'focus',    title: 'Foco no aprendizado',    desc: 'Ferramentas completas pra seu inglês evoluir' },
 ]
 
 function todayISO() { return new Date().toISOString().slice(0,10) }
@@ -88,17 +81,17 @@ export default function Home() {
     <div className="max-w-6xl mx-auto px-5 lg:px-10 pt-6 pb-10 lg:pt-8 lg:pb-16 space-y-6 lg:space-y-8">
       {/* HERO */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 to-bg-card border border-border-subtle p-6 lg:p-10">
-        {/* Decorative circles behind wolf */}
-        <div className="hidden lg:block absolute right-4 lg:right-16 top-1/2 -translate-y-1/2 w-64 h-64 pointer-events-none">
+        {/* Wolf + concentric circles, ambos no MESMO container pra centralizar */}
+        <div className="hidden sm:flex absolute right-4 lg:right-16 top-1/2 -translate-y-1/2 w-48 h-48 lg:w-64 lg:h-64 items-center justify-center pointer-events-none">
           <div className="absolute inset-0 rounded-full border border-blue-500/20" />
           <div className="absolute inset-4 rounded-full border border-blue-500/15" />
           <div className="absolute inset-10 rounded-full border border-blue-500/10" />
+          <img
+            src="/mascot.png"
+            alt="Lobo-guará"
+            className="relative w-2/3 h-2/3 object-contain opacity-95"
+          />
         </div>
-        <img
-          src="/mascot.png"
-          alt="Lobo-guará"
-          className="hidden sm:block absolute right-2 lg:right-16 top-1/2 -translate-y-1/2 w-36 lg:w-52 opacity-95 pointer-events-none"
-        />
         <div className="relative max-w-md">
           <p className="text-3xl lg:text-4xl font-display font-bold text-white leading-tight">
             Olá, {firstName}! <span className="inline-block">👋</span>
@@ -270,29 +263,6 @@ export default function Home() {
         </section>
       )}
 
-      {/* FEATURE CALLOUTS */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 pt-4 border-t border-border-subtle">
-        <CalloutItem
-          icon={<Trophy size={18} className="text-purple-400" />}
-          title="Visual moderno"
-          desc="Lobo-guará como símbolo de foco e determinação"
-        />
-        <CalloutItem
-          icon={<Palette size={18} className="text-blue-400" />}
-          title="Experiência fluida"
-          desc="Navegação intuitiva e fácil de usar"
-        />
-        <CalloutItem
-          icon={<Sparkles size={18} className="text-amber-400" />}
-          title="Gamificação"
-          desc="Progresso, desafios e conquistas que motivam"
-        />
-        <CalloutItem
-          icon={<Zap size={18} className="text-emerald-400" />}
-          title="Foco no aprendizado"
-          desc="Ferramentas completas pra seu inglês evoluir"
-        />
-      </section>
     </div>
   )
 }
@@ -302,20 +272,6 @@ function StatBlock({ v, label, accent }) {
     <div>
       <p className={`text-xl font-display font-bold ${accent ? 'text-blue-400' : 'text-white'}`}>{v}</p>
       <p className="text-[10px] text-gray-500 leading-tight mt-0.5">{label}</p>
-    </div>
-  )
-}
-
-function CalloutItem({ icon, title, desc }) {
-  return (
-    <div className="flex items-start gap-3">
-      <div className="w-9 h-9 rounded-lg bg-white/[0.03] border border-border-subtle flex items-center justify-center shrink-0">
-        {icon}
-      </div>
-      <div className="min-w-0">
-        <p className="text-sm font-semibold text-white leading-tight">{title}</p>
-        <p className="text-xs text-gray-500 mt-1 leading-snug">{desc}</p>
-      </div>
     </div>
   )
 }
