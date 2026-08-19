@@ -6,7 +6,7 @@ App de treino de inglês com visual minimalista (preto, roxo, branco), responsiv
 
 - 🔐 **Login com Google** (Firebase Auth — com fallback em modo demo/localStorage)
 - 🎯 **Foco de estudo** — escolha uma gramática (presente, passado, futuro, perguntas…) e um tema (comida, viagem, trabalho…) e toda a prática se adapta
-- 📚 **Dicionário** — 500+ palavras organizadas por nível e categoria
+- 📚 **Dicionário** — 2000+ palavras organizadas por nível e categoria
 - 🗂️ **Flashcards** — cartões viráveis com áudio e exemplos
 - 🎮 **Jogos** — múltipla escolha, combinar pares, completar frase, tradução rápida
 - 🎧 **Listening** — ouça a frase e escolha / digite (Web Speech API)
