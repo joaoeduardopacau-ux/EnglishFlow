@@ -1,5 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+const SPEECH_PREFS_KEY = 'speech-prefs'
+
+function readPrefs() {
+  try {
+    const raw = localStorage.getItem(SPEECH_PREFS_KEY)
+    return raw ? JSON.parse(raw) : {}
+  } catch { return {} }
+}
+
+export function getSpeechPrefs() { return readPrefs() }
+export function setSpeechPrefs(prefs) {
+  try {
+    const merged = { ...readPrefs(), ...prefs }
+    localStorage.setItem(SPEECH_PREFS_KEY, JSON.stringify(merged))
+  } catch {}
+}
+
 export function useSpeech() {
   const [supported, setSupported] = useState(false)
   const [speaking, setSpeaking] = useState(false)
@@ -22,10 +39,15 @@ export function useSpeech() {
     }
   }, [])
 
-  const speak = useCallback((text, { rate = 0.9, pitch = 1, voiceName } = {}) => {
+  // Opções da chamada > prefs globais > padrão.
+  const speak = useCallback((text, opts = {}) => {
     if (!supported) return
-    window.speechSynthesis.cancel()
+    const prefs = readPrefs()
+    const rate = opts.rate ?? prefs.rate ?? 0.9
+    const pitch = opts.pitch ?? prefs.pitch ?? 1
+    const voiceName = opts.voiceName ?? prefs.voiceName
 
+    window.speechSynthesis.cancel()
     const u = new SpeechSynthesisUtterance(text)
     u.lang = 'en-US'
     u.rate = rate
