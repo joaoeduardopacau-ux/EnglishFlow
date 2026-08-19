@@ -7,13 +7,12 @@ import { useProgress } from '../contexts/ProgressContext'
 import { useTheme } from '../contexts/ThemeContext'
 import BottomNav from './BottomNav'
 
-// Sidebar agrupada em seções — reduz ruído visual sem esconder nada.
 const navSections = [
   {
     title: null,
     items: [
-      { to: '/',          icon: 'home',   label: 'Início' },
-      { to: '/learn',     icon: 'target', label: 'Foco de Estudo' },
+      { to: '/',      icon: 'home',   label: 'Início' },
+      { to: '/learn', icon: 'target', label: 'Foco de Estudo' },
     ],
   },
   {
@@ -48,7 +47,6 @@ const navSections = [
   },
 ]
 
-// Bottom nav on mobile — 5 most-used items
 const bottomNavItems = [
   { to: '/',           icon: 'home',       label: 'Início' },
   { to: '/learn',      icon: 'target',     label: 'Foco' },
@@ -67,75 +65,39 @@ export default function Layout() {
     <div className="min-h-screen bg-bg-base flex">
       {/* Sidebar desktop */}
       <aside className="hidden lg:flex w-64 flex-col border-r border-border-subtle bg-bg-base sticky top-0 h-screen">
-        <div className="px-6 pt-6 pb-4 flex items-center justify-between">
+        <div className="px-5 pt-6 pb-5 flex items-center justify-between">
           <LogoBadge />
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-bg-elevated text-gray-500 hover:text-white transition-colors"
-            title={theme === 'dark' ? 'Tema claro' : 'Tema escuro'}
-          >
+          <IconBtn onClick={toggleTheme} title={theme === 'dark' ? 'Tema claro' : 'Tema escuro'}>
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
+          </IconBtn>
         </div>
 
-        <nav className="flex-1 px-3 pb-3 space-y-6 overflow-y-auto scrollbar-hide">
+        <nav className="flex-1 px-3 pb-3 space-y-5 overflow-y-auto scrollbar-hide">
           {navSections.map((section, si) => (
             <div key={si}>
               {section.title && (
-                <p className="px-3 mb-2 text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
+                <p className="px-3 mb-1.5 text-[10px] uppercase tracking-[0.14em] text-gray-500 font-semibold">
                   {section.title}
                 </p>
               )}
               <div className="space-y-0.5">
-                {section.items.map(({ to, icon, label }) => (
-                  <NavLink
-                    key={to}
-                    to={to}
-                    end={to === '/'}
-                    className={({ isActive }) =>
-                      `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                        isActive
-                          ? 'bg-purple-950/40 text-white'
-                          : 'text-gray-400 hover:text-white hover:bg-bg-elevated'
-                      }`
-                    }
-                  >
-                    <NavIcon name={icon} size={22} />
-                    <span className="text-sm font-medium">{label}</span>
-                  </NavLink>
-                ))}
+                {section.items.map((item) => <NavItem key={item.to} {...item} />)}
               </div>
             </div>
           ))}
         </nav>
 
-        <div className="px-3 py-3 border-t border-border-subtle">
-          <NavLink
-            to="/settings"
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-lg mb-2 transition-colors ${
-                isActive
-                  ? 'bg-purple-950/40 text-white'
-                  : 'text-gray-400 hover:text-white hover:bg-bg-elevated'
-              }`
-            }
-          >
-            <NavIcon name="gear" size={22} />
-            <span className="text-sm font-medium">Configurações</span>
-          </NavLink>
-          <div className="flex items-center gap-3 px-2 py-2">
+        <div className="px-3 py-3 border-t border-border-subtle space-y-2">
+          <NavItem to="/settings" icon="gear" label="Configurações" />
+          <div className="flex items-center gap-2.5 px-3 py-1.5">
             <Avatar user={user} />
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">{user?.displayName || 'Usuário'}</p>
-              <p className="text-[11px] text-gray-500 truncate">Nível {level} · {xp} XP</p>
+              <p className="text-[13px] font-medium text-white truncate leading-tight">{user?.displayName || 'Usuário'}</p>
+              <p className="text-[11px] text-gray-500 truncate leading-tight mt-0.5">Nível {level} · {xp} XP</p>
             </div>
-            <button
-              onClick={signOut}
-              className="p-1.5 rounded-lg hover:bg-bg-elevated text-gray-500 hover:text-red-400 transition-colors"
-              title="Sair"
-            >
+            <IconBtn onClick={signOut} title="Sair" small hoverRed>
               <LogOut size={14} />
-            </button>
+            </IconBtn>
           </div>
         </div>
       </aside>
@@ -143,26 +105,22 @@ export default function Layout() {
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile top bar */}
-        <header className="lg:hidden sticky top-0 z-30 bg-bg-base/90 backdrop-blur-xl border-b border-border-subtle safe-pt">
-          <div className="flex items-center justify-between px-5 py-4">
+        <header className="lg:hidden sticky top-0 z-30 bg-bg-base/95 backdrop-blur-xl border-b border-border-subtle safe-pt">
+          <div className="flex items-center justify-between px-5 py-3">
             <LogoBadge compact />
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs text-gray-500 font-mono">Lv.{level} · {xp}XP</span>
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-lg text-gray-400"
-                title={theme === 'dark' ? 'Tema claro' : 'Tema escuro'}
-              >
-                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-              </button>
-              <button onClick={signOut} className="p-2 rounded-lg text-gray-400">
-                <LogOut size={18} />
-              </button>
+            <div className="flex items-center gap-1">
+              <span className="text-[11px] font-mono text-gray-500 mr-1">Lv.{level}</span>
+              <IconBtn onClick={toggleTheme} title="Tema" small>
+                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+              </IconBtn>
+              <IconBtn onClick={signOut} title="Sair" small hoverRed>
+                <LogOut size={16} />
+              </IconBtn>
             </div>
           </div>
         </header>
 
-        <main className="flex-1 pb-24 lg:pb-8">
+        <main className="flex-1 pb-32 lg:pb-8">
           <div key={location.pathname} className="page-enter page-enter-active">
             <Outlet />
           </div>
@@ -174,11 +132,44 @@ export default function Layout() {
   )
 }
 
+function NavItem({ to, icon, label }) {
+  return (
+    <NavLink
+      to={to}
+      end={to === '/'}
+      className={({ isActive }) =>
+        `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+          isActive
+            ? 'bg-purple-500/10 text-purple-300'
+            : 'text-gray-400 hover:text-white hover:bg-bg-elevated'
+        }`
+      }
+    >
+      <NavIcon name={icon} size={22} />
+      <span className="text-[13px] font-medium tracking-tight">{label}</span>
+    </NavLink>
+  )
+}
+
+function IconBtn({ children, onClick, title, small = false, hoverRed = false }) {
+  return (
+    <button
+      onClick={onClick}
+      title={title}
+      className={`${small ? 'p-1.5' : 'p-2'} rounded-lg text-gray-500 transition-colors ${
+        hoverRed ? 'hover:text-red-400' : 'hover:text-white'
+      } hover:bg-bg-elevated`}
+    >
+      {children}
+    </button>
+  )
+}
+
 function LogoBadge({ compact = false }) {
   return (
-    <div className="flex items-center gap-2.5">
-      <Logo size={compact ? 36 : 38} />
-      <p className={`text-white font-display font-black tracking-tight ${compact ? 'text-base' : 'text-[15px]'}`}>
+    <div className="flex items-center gap-2">
+      <Logo size={compact ? 32 : 34} />
+      <p className={`text-white font-display font-black tracking-tight ${compact ? 'text-[15px]' : 'text-[15px]'}`}>
         EnglishFlow
       </p>
     </div>
