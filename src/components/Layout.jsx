@@ -132,7 +132,11 @@ function SidebarContent() {
 function SidebarBrand() {
   return (
     <Link to="/" className="flex items-center gap-2.5 min-w-0">
-      <img src="/icon-source.png" alt="" className="w-10 h-10 rounded-xl shrink-0" />
+      <img
+        src="/mascot.png"
+        alt=""
+        className="w-10 h-10 shrink-0 object-contain drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]"
+      />
       <div className="leading-tight min-w-0">
         <p className="text-[10px] uppercase tracking-widest text-gray-500 font-semibold">Sinceramente</p>
         <p className="text-white font-display font-black text-base tracking-tight -mt-0.5 truncate">

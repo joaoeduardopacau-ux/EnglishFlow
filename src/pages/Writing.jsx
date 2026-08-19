@@ -1,18 +1,18 @@
 import { useState, useEffect, useMemo } from 'react'
-import { PenLine, Sparkles, Save, Trash2, RefreshCw, Calendar, TrendingUp, BookOpen, Lightbulb } from 'lucide-react'
+import { Sparkles, Save, Trash2, RefreshCw, BookOpen, Lightbulb } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useProgress } from '../contexts/ProgressContext'
 import { WRITING_PROMPTS, getPromptOfTheDay, getRandomPrompt } from '../data/writingPrompts'
 
-const CATEGORY_COLORS = {
-  daily: 'from-blue-600 to-indigo-800',
-  travel: 'from-cyan-600 to-blue-800',
-  food: 'from-orange-500 to-red-700',
-  people: 'from-pink-500 to-fuchsia-800',
-  memories: 'from-yellow-500 to-orange-700',
-  dreams: 'from-purple-500 to-violet-800',
-  hobbies: 'from-emerald-500 to-teal-700',
-  opinion: 'from-rose-500 to-red-700',
+const CATEGORY_ACCENTS = {
+  daily:    'text-blue-300',
+  travel:   'text-cyan-300',
+  food:     'text-orange-300',
+  people:   'text-pink-300',
+  memories: 'text-amber-300',
+  dreams:   'text-violet-300',
+  hobbies:  'text-emerald-300',
+  opinion:  'text-rose-300',
 }
 
 function todayISO() {
@@ -112,76 +112,76 @@ export default function Writing() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-5 lg:px-10 py-6 lg:py-10 space-y-6">
+    <div className="max-w-4xl mx-auto px-5 lg:px-10 pt-6 pb-10 lg:pt-8 lg:pb-16 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-800 flex items-center justify-center shadow-glow-sm">
-            <PenLine size={22} className="text-white" />
-          </div>
-          <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-white">Writing Journal</h1>
-            <p className="text-gray-400 text-sm">Pratique escrita em inglês todos os dias</p>
-          </div>
+      <header className="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <p className="kbd">Writing Journal</p>
+          <h1 className="text-3xl lg:text-4xl font-display font-bold text-white tracking-tight mt-1">
+            Escreva em inglês
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">Pratique todos os dias e melhore sua fluência escrita</p>
         </div>
 
         <div className="flex gap-1 bg-bg-elevated rounded-lg p-1">
           <button
             onClick={() => setViewMode('write')}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-              viewMode === 'write' ? 'bg-purple-600 text-white' : 'text-gray-400'
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
+              viewMode === 'write' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'
             }`}
           >
             Escrever
           </button>
           <button
             onClick={() => setViewMode('history')}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-              viewMode === 'history' ? 'bg-purple-600 text-white' : 'text-gray-400'
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
+              viewMode === 'history' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'
             }`}
           >
             Histórico ({totalEntries})
           </button>
         </div>
-      </div>
+      </header>
 
-      {/* Stats */}
+      {/* Stats — clean grid */}
       <div className="grid grid-cols-3 gap-3">
-        <StatBox icon={Calendar} label="Entradas" value={totalEntries} gradient="from-indigo-500 to-purple-700" />
-        <StatBox icon={BookOpen} label="Palavras escritas" value={totalWords} gradient="from-purple-500 to-fuchsia-700" />
-        <StatBox icon={TrendingUp} label="Média por dia" value={totalEntries > 0 ? Math.round(totalWords / totalEntries) : 0} gradient="from-fuchsia-500 to-pink-700" />
+        <StatCard label="Entradas" value={totalEntries} accent="text-blue-400" />
+        <StatCard label="Palavras escritas" value={totalWords.toLocaleString('pt-BR')} accent="text-cyan-400" />
+        <StatCard label="Média por dia" value={totalEntries > 0 ? Math.round(totalWords / totalEntries) : 0} accent="text-emerald-400" />
       </div>
 
       {viewMode === 'write' ? (
         <>
-          {/* Prompt do dia */}
-          <div className="card-elevated overflow-hidden">
-            <div className={`bg-gradient-to-br ${CATEGORY_COLORS[currentPrompt.category]} p-5`}>
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="text-3xl">{currentPrompt.emoji}</div>
-                  <div>
-                    <p className="text-xs text-white/70 uppercase tracking-wider mb-1">Prompt de hoje</p>
-                    <h2 className="text-lg lg:text-xl font-bold text-white">{currentPrompt.prompt}</h2>
-                  </div>
+          {/* Prompt do dia — minimalista */}
+          <div className="card overflow-hidden">
+            <div className="p-5 border-b border-border-subtle flex items-start justify-between gap-3">
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="text-3xl shrink-0">{currentPrompt.emoji}</div>
+                <div className="min-w-0">
+                  <p className={`kbd ${CATEGORY_ACCENTS[currentPrompt.category] || 'text-blue-400/80'}`}>
+                    Prompt de hoje
+                  </p>
+                  <h2 className="text-base lg:text-lg font-semibold text-white leading-snug mt-1">
+                    {currentPrompt.prompt}
+                  </h2>
                 </div>
-                <button
-                  onClick={handleNewPrompt}
-                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors shrink-0"
-                  title="Novo prompt"
-                >
-                  <RefreshCw size={16} />
-                </button>
               </div>
+              <button
+                onClick={handleNewPrompt}
+                className="p-2 rounded-lg text-gray-500 hover:text-white hover:bg-bg-elevated transition-colors shrink-0"
+                title="Novo prompt"
+              >
+                <RefreshCw size={16} />
+              </button>
             </div>
 
             {/* Hint */}
-            <div className="p-4 border-b border-border-subtle">
+            <div className="px-5 py-3 border-b border-border-subtle">
               <button
                 onClick={() => setShowHint(!showHint)}
-                className="text-xs text-purple-300 hover:text-purple-200 flex items-center gap-1"
+                className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1.5"
               >
-                <Lightbulb size={14} />
+                <Lightbulb size={12} />
                 {showHint ? 'Esconder dica' : 'Ver dica'}
               </button>
               {showHint && (
@@ -195,49 +195,67 @@ export default function Writing() {
                 value={text}
                 onChange={e => setText(e.target.value)}
                 placeholder="Comece a escrever em inglês..."
-                className="w-full min-h-[300px] bg-bg-base border border-border-subtle rounded-xl p-4 text-white placeholder-gray-500 resize-y focus:outline-none focus:border-purple-600 transition-colors"
+                className="w-full min-h-[280px] bg-bg-base border border-border-subtle rounded-xl p-4 text-white placeholder-gray-500 resize-y focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-colors leading-relaxed"
                 spellCheck="true"
                 lang="en"
               />
+              {/* Word count progress bar */}
+              <div className="mt-3">
+                <div className="flex items-center justify-between text-xs text-gray-500 mb-1.5">
+                  <span>
+                    <strong className="text-white tabular-nums">{wordCount}</strong> palavras · {charCount} caracteres
+                  </span>
+                  {wordCount >= 100 && (
+                    <span className="text-emerald-400 flex items-center gap-1">
+                      <Sparkles size={12} /> Excelente!
+                    </span>
+                  )}
+                </div>
+                <div className="h-1.5 bg-bg-elevated rounded-full overflow-hidden flex">
+                  {[20, 50, 100].map((t, i) => {
+                    const seg = wordCount >= t
+                    const prev = i === 0 ? 0 : [20, 50][i - 1]
+                    const localFill = Math.max(0, Math.min(1, (wordCount - prev) / (t - prev)))
+                    return (
+                      <div key={t} className="flex-1 relative">
+                        <div
+                          className={`h-full transition-all duration-300 ${
+                            i === 0 ? 'bg-blue-500/70' : i === 1 ? 'bg-blue-500' : 'bg-emerald-500'
+                          }`}
+                          style={{ width: `${localFill * 100}%` }}
+                        />
+                      </div>
+                    )
+                  })}
+                </div>
+                <div className="flex justify-between text-[10px] text-gray-600 mt-1">
+                  <span>🌱 20</span>
+                  <span>⭐ 50</span>
+                  <span>🏆 100</span>
+                </div>
+              </div>
             </div>
 
-            {/* Footer */}
-            <div className="flex items-center justify-between px-4 pb-4">
-              <div className="flex items-center gap-3 text-xs text-gray-400">
-                <span><strong className="text-white">{wordCount}</strong> palavra{wordCount !== 1 ? 's' : ''}</span>
-                <span>·</span>
-                <span><strong className="text-white">{charCount}</strong> caractere{charCount !== 1 ? 's' : ''}</span>
-                {wordCount >= 50 && <span className="text-emerald-400 flex items-center gap-1"><Sparkles size={12} /> Ótimo!</span>}
-              </div>
-              <div className="flex gap-2">
-                {todayEntry && (
-                  <button
-                    onClick={handleDelete}
-                    className="p-2 rounded-lg text-red-400 hover:bg-red-950/40 transition-colors"
-                    title="Excluir entrada"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                )}
+            {/* Footer actions */}
+            <div className="flex items-center justify-end gap-2 px-4 pb-4">
+              {todayEntry && (
                 <button
-                  onClick={handleSave}
-                  disabled={!text.trim() || saved}
-                  className={`btn-primary flex items-center gap-2 ${
-                    saved ? 'bg-emerald-600' : ''
-                  } ${!text.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  onClick={handleDelete}
+                  className="p-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors"
+                  title="Excluir entrada"
                 >
-                  <Save size={16} />
-                  {saved ? '✓ Salvo!' : 'Salvar'}
+                  <Trash2 size={16} />
                 </button>
-              </div>
+              )}
+              <button
+                onClick={handleSave}
+                disabled={!text.trim() || saved}
+                className={`btn-primary flex items-center gap-2 ${saved ? '!bg-emerald-600' : ''} ${!text.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <Save size={16} />
+                {saved ? '✓ Salvo!' : 'Salvar'}
+              </button>
             </div>
-          </div>
-
-          {/* Metas de escrita */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <GoalBox target={20} current={wordCount} label="Iniciante" emoji="🌱" />
-            <GoalBox target={50} current={wordCount} label="Bom" emoji="⭐" />
-            <GoalBox target={100} current={wordCount} label="Excelente" emoji="🏆" />
           </div>
         </>
       ) : (
@@ -276,35 +294,11 @@ export default function Writing() {
   )
 }
 
-function StatBox({ icon: Icon, label, value, gradient }) {
+function StatCard({ label, value, accent }) {
   return (
-    <div className={`card-elevated p-3 bg-gradient-to-br ${gradient} border-white/10`}>
-      <Icon size={16} className="text-white/90" />
-      <p className="text-xs text-white/70 mt-1">{label}</p>
-      <p className="text-xl font-bold text-white">{value}</p>
-    </div>
-  )
-}
-
-function GoalBox({ target, current, label, emoji }) {
-  const percent = Math.min(100, (current / target) * 100)
-  const done = current >= target
-  return (
-    <div className={`card p-3 ${done ? 'border-emerald-800/40' : ''}`}>
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-semibold text-white">{emoji} {label}</span>
-        <span className={`text-xs font-mono ${done ? 'text-emerald-400' : 'text-gray-400'}`}>
-          {current}/{target}
-        </span>
-      </div>
-      <div className="h-1.5 bg-bg-elevated rounded-full overflow-hidden">
-        <div
-          className={`h-full transition-all duration-500 ${
-            done ? 'bg-gradient-to-r from-emerald-500 to-teal-500' : 'bg-gradient-to-r from-purple-500 to-fuchsia-500'
-          }`}
-          style={{ width: `${percent}%` }}
-        />
-      </div>
+    <div className="card p-4">
+      <p className="text-[10px] uppercase tracking-widest text-gray-500 font-semibold">{label}</p>
+      <p className={`text-2xl lg:text-3xl font-display font-bold mt-1 ${accent || 'text-white'}`}>{value}</p>
     </div>
   )
 }
