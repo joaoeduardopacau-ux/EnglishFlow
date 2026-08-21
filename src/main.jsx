@@ -15,8 +15,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 // Registra o Service Worker (só em produção, não atrapalha dev)
 if ('serviceWorker' in navigator && !import.meta.env.DEV) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => console.log('✅ SW registrado:', reg.scope))
-      .catch(err => console.log('❌ SW erro:', err))
+    navigator.serviceWorker.register('/service-worker.js').catch(() => {})
   })
 }
