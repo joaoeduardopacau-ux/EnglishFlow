@@ -5,7 +5,7 @@ import { useProgress } from '../contexts/ProgressContext'
 import { dictionary } from '../data/dictionary'
 import { Brain, Check, X, RotateCw, Clock, Award, ArrowLeft, Sparkles, Volume2 } from 'lucide-react'
 import { useSpeech } from '../hooks/useSpeech'
-import SharkMascot from '../components/SharkMascot'
+import SharkMascot from '../components/WolfMascot'
 
 // Encontra dados da palavra no dictionary
 function findWord(key) {

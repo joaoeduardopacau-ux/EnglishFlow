@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ProgressProvider } from './contexts/ProgressContext'
 import { StageProvider } from './contexts/StageContext'
@@ -7,26 +8,32 @@ import { ThemeProvider } from './contexts/ThemeContext'
 import { ReviewProvider } from './contexts/ReviewContext'
 import AchievementToasts from './components/AchievementToasts'
 import InstallPrompt from './components/InstallPrompt'
+import ErrorBoundary from './components/ErrorBoundary'
 import Layout from './components/Layout'
 import Login from './pages/Login'
 import Home from './pages/Home'
-import Flashcards from './pages/Flashcards'
-import Games from './pages/Games'
-import Listening from './pages/Listening'
-import SentenceBuilder from './pages/SentenceBuilder'
-import Dictionary from './pages/Dictionary'
-import Speaking from './pages/Speaking'
-import Achievements from './pages/Achievements'
-import Learn from './pages/Learn'
-import Dashboard from './pages/Dashboard'
-import StreakCalendar from './pages/StreakCalendar'
-import Review from './pages/Review'
-import Writing from './pages/Writing'
-import Songs from './pages/Songs'
-import LevelTest from './pages/LevelTest'
-import Settings from './pages/Settings'
-import Leaderboard from './pages/Leaderboard'
-import Chatbot from './pages/Chatbot'
+
+// Lazy — split rotas menos usadas
+const Flashcards    = lazy(() => import('./pages/Flashcards'))
+const Games         = lazy(() => import('./pages/Games'))
+const Listening     = lazy(() => import('./pages/Listening'))
+const SentenceBuilder = lazy(() => import('./pages/SentenceBuilder'))
+const Dictionary    = lazy(() => import('./pages/Dictionary'))
+const Speaking      = lazy(() => import('./pages/Speaking'))
+const Achievements  = lazy(() => import('./pages/Achievements'))
+const Learn         = lazy(() => import('./pages/Learn'))
+const Dashboard     = lazy(() => import('./pages/Dashboard'))
+const StreakCalendar = lazy(() => import('./pages/StreakCalendar'))
+const Review        = lazy(() => import('./pages/Review'))
+const Writing       = lazy(() => import('./pages/Writing'))
+const Songs         = lazy(() => import('./pages/Songs'))
+const LevelTest     = lazy(() => import('./pages/LevelTest'))
+const Settings      = lazy(() => import('./pages/Settings'))
+const Leaderboard   = lazy(() => import('./pages/Leaderboard'))
+const Chatbot       = lazy(() => import('./pages/Chatbot'))
+const Privacy       = lazy(() => import('./pages/Privacy'))
+const Terms         = lazy(() => import('./pages/Terms'))
+const NotFound      = lazy(() => import('./pages/NotFound'))
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -40,12 +47,12 @@ function LoadingScreen() {
     <div className="min-h-screen bg-bg-base flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
         <img
-          src="/icon-source.png"
+          src="/mascot.png"
           alt="EnglishFlow"
-          className="w-16 h-16 rounded-2xl shadow-glow animate-pulse-slow object-cover"
+          className="w-16 h-16 object-contain animate-pulse-slow drop-shadow-[0_0_16px_rgba(59,130,246,0.4)]"
         />
         <div className="w-32 h-1 bg-bg-elevated rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-purple-700 to-purple-400 rounded-full animate-[loading_1.5s_ease-in-out_infinite]" />
+          <div className="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full animate-[loading_1.5s_ease-in-out_infinite]" />
         </div>
       </div>
     </div>
@@ -54,49 +61,56 @@ function LoadingScreen() {
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <ProgressProvider>
-          <ReviewProvider>
-            <StageProvider>
-              <FocusProvider>
-                <AchievementToasts />
-                <InstallPrompt />
-                <Routes>
-                  <Route path="/login" element={<Login />} />
-                  <Route
-                    path="/"
-                    element={
-                      <ProtectedRoute>
-                        <Layout />
-                      </ProtectedRoute>
-                    }
-                  >
-                    <Route index element={<Home />} />
-                    <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="streak" element={<StreakCalendar />} />
-                    <Route path="review" element={<Review />} />
-                    <Route path="writing" element={<Writing />} />
-                    <Route path="songs" element={<Songs />} />
-                    <Route path="level-test" element={<LevelTest />} />
-                    <Route path="settings" element={<Settings />} />
-                    <Route path="leaderboard" element={<Leaderboard />} />
-                    <Route path="chatbot" element={<Chatbot />} />
-                    <Route path="learn" element={<Learn />} />
-                    <Route path="flashcards" element={<Flashcards />} />
-                    <Route path="games" element={<Games />} />
-                    <Route path="listening" element={<Listening />} />
-                    <Route path="builder" element={<SentenceBuilder />} />
-                    <Route path="speaking" element={<Speaking />} />
-                    <Route path="dictionary" element={<Dictionary />} />
-                    <Route path="achievements" element={<Achievements />} />
-                  </Route>
-                </Routes>
-              </FocusProvider>
-            </StageProvider>
-          </ReviewProvider>
-        </ProgressProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <AuthProvider>
+          <ProgressProvider>
+            <ReviewProvider>
+              <StageProvider>
+                <FocusProvider>
+                  <AchievementToasts />
+                  <InstallPrompt />
+                  <Suspense fallback={<LoadingScreen />}>
+                    <Routes>
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/privacy" element={<Privacy />} />
+                      <Route path="/terms" element={<Terms />} />
+                      <Route
+                        path="/"
+                        element={
+                          <ProtectedRoute>
+                            <Layout />
+                          </ProtectedRoute>
+                        }
+                      >
+                        <Route index element={<Home />} />
+                        <Route path="dashboard" element={<Dashboard />} />
+                        <Route path="streak" element={<StreakCalendar />} />
+                        <Route path="review" element={<Review />} />
+                        <Route path="writing" element={<Writing />} />
+                        <Route path="songs" element={<Songs />} />
+                        <Route path="level-test" element={<LevelTest />} />
+                        <Route path="settings" element={<Settings />} />
+                        <Route path="leaderboard" element={<Leaderboard />} />
+                        <Route path="chatbot" element={<Chatbot />} />
+                        <Route path="learn" element={<Learn />} />
+                        <Route path="flashcards" element={<Flashcards />} />
+                        <Route path="games" element={<Games />} />
+                        <Route path="listening" element={<Listening />} />
+                        <Route path="builder" element={<SentenceBuilder />} />
+                        <Route path="speaking" element={<Speaking />} />
+                        <Route path="dictionary" element={<Dictionary />} />
+                        <Route path="achievements" element={<Achievements />} />
+                      </Route>
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </Suspense>
+                </FocusProvider>
+              </StageProvider>
+            </ReviewProvider>
+          </ProgressProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   )
 }
