@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useProgress } from '../contexts/ProgressContext'
 import { Flame, ChevronLeft, ChevronRight, Award, Zap, Calendar as CalIcon } from 'lucide-react'
+import EmptyState from '../components/EmptyState'
 
 const MONTHS = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
 const DAYS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
@@ -68,6 +70,16 @@ export default function StreakCalendar() {
           <p className="text-gray-400 text-sm">Acompanhe seus dias de estudo</p>
         </div>
       </div>
+
+      {/* Empty state se nunca estudou */}
+      {streak === 0 && activeDaysInMonth === 0 && (bestStreak || 0) === 0 && (
+        <EmptyState
+          icon={<Flame size={22} />}
+          title="Comece seu primeiro streak"
+          desc="Estude pelo menos uma atividade hoje pra acender a chama. A cada dia consecutivo, o número do streak sobe."
+          action={<Link to="/" className="btn-primary">Começar agora</Link>}
+        />
+      )}
 
       {/* Stats do streak */}
       <div className="grid grid-cols-3 gap-3">

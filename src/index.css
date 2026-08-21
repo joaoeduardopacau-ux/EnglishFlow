@@ -117,3 +117,51 @@
   outline-offset: 2px;
   border-radius: 6px;
 }
+
+/* ── LIGHT THEME OVERRIDES ── */
+/* Textos brancos em superfícies claras viram primary */
+:root[data-theme="light"] aside .text-white,
+:root[data-theme="light"] header .text-white,
+:root[data-theme="light"] .card .text-white,
+:root[data-theme="light"] .card-elevated .text-white,
+:root[data-theme="light"] main .text-white:not([class*="bg-gradient-to"]):not([class*="bg-purple"]):not([class*="bg-red"]):not([class*="bg-emerald"]):not([class*="bg-blue"]):not([class*="bg-orange"]):not([class*="bg-fuchsia"]):not([class*="bg-violet"]):not([class*="bg-indigo"]):not([class*="bg-amber"]):not([class*="bg-yellow"]):not([class*="bg-slate"]) {
+  color: var(--text-primary);
+}
+
+/* Cinzas fantasmas em fundo claro */
+:root[data-theme="light"] .text-gray-400,
+:root[data-theme="light"] .text-gray-500,
+:root[data-theme="light"] .text-gray-600 { color: var(--text-muted); }
+:root[data-theme="light"] .text-gray-200,
+:root[data-theme="light"] .text-gray-300 { color: #1a2340; }
+
+/* Cards com bg-white/[0.0X] ficam invisíveis */
+:root[data-theme="light"] .bg-white\/\[0\.02\],
+:root[data-theme="light"] .bg-white\/\[0\.03\],
+:root[data-theme="light"] .bg-white\/\[0\.06\] { background-color: rgba(10, 22, 48, 0.04) !important; }
+
+/* Placeholder */
+:root[data-theme="light"] .placeholder-gray-500::placeholder { color: #8598b8; }
+
+/* Cores accent legíveis no light */
+:root[data-theme="light"] .text-orange-300 { color: #c2410c; }
+:root[data-theme="light"] .text-amber-300  { color: #b45309; }
+:root[data-theme="light"] .text-blue-300,
+:root[data-theme="light"] .text-blue-400   { color: #1d4ed8; }
+:root[data-theme="light"] .text-emerald-300,
+:root[data-theme="light"] .text-emerald-400 { color: #047857; }
+:root[data-theme="light"] .text-red-300,
+:root[data-theme="light"] .text-red-400    { color: #b91c1c; }
+:root[data-theme="light"] .text-yellow-300,
+:root[data-theme="light"] .text-yellow-400 { color: #a16207; }
+:root[data-theme="light"] .text-fuchsia-300,
+:root[data-theme="light"] .text-fuchsia-400 { color: #a21caf; }
+:root[data-theme="light"] .text-slate-300,
+:root[data-theme="light"] .text-slate-400  { color: #475569; }
+
+/* Hero card com gradient dark — swap pra light-friendly */
+:root[data-theme="light"] section.rounded-3xl.bg-gradient-to-br.from-slate-900,
+:root[data-theme="light"] section.rounded-3xl.bg-gradient-to-br.from-purple-900\/50 {
+  background: linear-gradient(135deg, #e3edff 0%, #ffffff 55%, #f6f8ff 100%) !important;
+  border-color: rgba(0,84,214,0.20) !important;
+}
