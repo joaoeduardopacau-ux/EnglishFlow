@@ -99,3 +99,21 @@
 .flip-card-back { transform:rotateY(180deg); position:absolute; inset:0; }
 .page-enter { opacity:0; transform:translateY(8px); }
 .page-enter-active { opacity:1; transform:translateY(0); transition:opacity 250ms ease,transform 250ms ease; }
+
+/* Prose para páginas legais (Privacy/Terms) */
+.prose-legal { color: var(--text-primary); line-height: 1.7; }
+.prose-legal p { margin: 0 0 1rem; color: #cbd5e1; font-size: 15px; }
+.prose-legal h2 { color: #fff; font-size: 1.25rem; font-weight: 700; margin: 2rem 0 0.75rem; letter-spacing: -0.01em; }
+.prose-legal ul { margin: 0 0 1rem; padding-left: 1.25rem; list-style: disc; color: #cbd5e1; font-size: 15px; }
+.prose-legal li { margin-bottom: 0.4rem; }
+.prose-legal a { color: #60a5fa; text-decoration: underline; text-underline-offset: 3px; }
+.prose-legal a:hover { color: #93c5fd; }
+.prose-legal strong { color: #fff; font-weight: 600; }
+.prose-legal code { background: rgba(59,130,246,.12); color: #93c5fd; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+
+/* Focus visible acessibilidade */
+:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
