@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { useProgress, ACHIEVEMENTS } from '../contexts/ProgressContext'
-import { TrendingUp, Award, Target, Zap, Calendar, Flame, BookOpen, Star, BarChart3 } from 'lucide-react'
+import { TrendingUp, Award, Target, Zap, Calendar, Flame, BookOpen, Star, BarChart3, Sparkles } from 'lucide-react'
+import EmptyState from '../components/EmptyState'
 
 const MODULE_LABELS = {
   flashcards: { label: 'Flashcards', color: '#2997FF', emoji: '📚' },
@@ -25,6 +27,33 @@ export default function Dashboard() {
   const activeDays = Object.keys(dailyLog).length
   const totalXpEver = Object.values(dailyLog).reduce((sum,d)=>sum+(d.xp||0),0)
   const recentAchievements = achievements.slice(-3).map(id=>ACHIEVEMENTS.find(a=>a.id===id)).filter(Boolean).reverse()
+
+  if (totalXpEver === 0) {
+    return (
+      <div className="max-w-3xl mx-auto px-5 lg:px-10 py-6 lg:py-10 space-y-6">
+        <div className="flex items-center gap-3">
+          <div className="w-11 h-11 rounded-xl bg-blue-600/15 border border-blue-500/25 flex items-center justify-center">
+            <BarChart3 size={22} className="text-blue-300" />
+          </div>
+          <div>
+            <h1 className="text-2xl lg:text-3xl font-bold text-white">Dashboard</h1>
+            <p className="text-gray-400 text-sm">Seu progresso em detalhes</p>
+          </div>
+        </div>
+        <EmptyState
+          icon={<Sparkles size={22} />}
+          title="Seu dashboard tá zerado — bora mudar isso"
+          desc="Faça sua primeira atividade em qualquer módulo pra começar a acumular XP, streak e ver os gráficos ganharem vida."
+          action={
+            <div className="flex flex-wrap gap-2 justify-center">
+              <Link to="/flashcards" className="btn-primary">Começar por Flashcards</Link>
+              <Link to="/" className="btn-secondary">Ver todos os módulos</Link>
+            </div>
+          }
+        />
+      </div>
+    )
+  }
 
   return <div className="max-w-6xl mx-auto px-5 lg:px-10 py-6 lg:py-10 space-y-6">
     <div className="flex items-center gap-3"><div className="w-11 h-11 rounded-xl bg-blue-600/15 border border-blue-500/25 flex items-center justify-center"><BarChart3 size={22} className="text-blue-300" /></div><div><h1 className="text-2xl lg:text-3xl font-bold text-white">Dashboard</h1><p className="text-gray-400 text-sm">Seu progresso em detalhes</p></div></div>
