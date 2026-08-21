@@ -1,5 +1,7 @@
-import { Trophy, Flame, Target, TrendingUp } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Trophy, Flame, Target, TrendingUp, Sparkles } from 'lucide-react'
 import { useProgress, ACHIEVEMENTS, levelFromXP, xpForLevel } from '../contexts/ProgressContext'
+import EmptyState from '../components/EmptyState'
 
 export default function Achievements() {
   const p = useProgress()
@@ -55,6 +57,16 @@ export default function Achievements() {
       {/* Badges */}
       <div>
         <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-3">Badges</h2>
+        {unlockedSet.size === 0 && (
+          <div className="mb-4">
+            <EmptyState
+              icon={<Sparkles size={22} />}
+              title="Sua primeira badge tá logo ali"
+              desc="Faça sua primeira atividade pra desbloquear o badge 'Primeiro passo'. Todo módulo dá XP e libera novas conquistas."
+              action={<Link to="/" className="btn-primary">Começar a praticar</Link>}
+            />
+          </div>
+        )}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {ACHIEVEMENTS.map(a => {
             const unlocked = unlockedSet.has(a.id)
