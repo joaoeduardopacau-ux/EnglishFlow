@@ -4,6 +4,7 @@ import { useTheme, THEMES } from '../contexts/ThemeContext'
 import { useProgress } from '../contexts/ProgressContext'
 import { useReview } from '../contexts/ReviewContext'
 import { useAuth } from '../contexts/AuthContext'
+import { useToast } from '../contexts/ToastContext'
 import { useSpeech, getSpeechPrefs, setSpeechPrefs } from '../hooks/useSpeech'
 import { dictionary } from '../data/dictionary'
 import { SONGS } from '../data/songs'
@@ -23,6 +24,7 @@ export default function Settings() {
   const { resetProgress, dailyGoal, setDailyGoal } = useProgress()
   const { resetReview } = useReview()
   const { supported, voices, speak } = useSpeech()
+  const toast = useToast()
 
   const [soundOn, setSoundOn] = useState(() => {
     try { return localStorage.getItem('soundEnabled') !== 'false' } catch { return true }
@@ -59,6 +61,7 @@ export default function Settings() {
     a.download = `englishflow-${new Date().toISOString().slice(0,10)}.json`
     a.click()
     URL.revokeObjectURL(a.href)
+    toast.success('Backup baixado com sucesso.')
   }
 
   function handleImportFile(e) {
@@ -73,10 +76,10 @@ export default function Settings() {
         for (const [k, v] of Object.entries(parsed.data)) {
           try { localStorage.setItem(k, v) } catch {}
         }
-        alert('✅ Importado! Recarregando...')
-        window.location.reload()
+        toast.success('Backup importado! Recarregando…')
+        setTimeout(() => window.location.reload(), 900)
       } catch (err) {
-        alert('❌ Arquivo inválido: ' + err.message)
+        toast.error('Arquivo inválido: ' + err.message)
       }
     }
     reader.readAsText(file)
@@ -95,8 +98,8 @@ export default function Settings() {
       if (soundKeep) localStorage.setItem('soundEnabled', soundKeep)
       if (speechKeep) localStorage.setItem('speech-prefs', speechKeep)
     } catch {}
-    alert('✅ Progresso resetado! Recarregando...')
-    window.location.reload()
+    toast.success('Progresso resetado. Recarregando…')
+    setTimeout(() => window.location.reload(), 900)
   }
 
   return (

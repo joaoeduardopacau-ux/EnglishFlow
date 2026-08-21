@@ -6,9 +6,11 @@ import { StageProvider } from './contexts/StageContext'
 import { FocusProvider } from './contexts/FocusContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { ReviewProvider } from './contexts/ReviewContext'
+import { ToastProvider } from './contexts/ToastContext'
 import AchievementToasts from './components/AchievementToasts'
 import InstallPrompt from './components/InstallPrompt'
 import ErrorBoundary from './components/ErrorBoundary'
+import Onboarding from './components/Onboarding'
 import Layout from './components/Layout'
 import Login from './pages/Login'
 import Home from './pages/Home'
@@ -42,6 +44,12 @@ function ProtectedRoute({ children }) {
   return children
 }
 
+function OnboardingGate() {
+  const { user, loading } = useAuth()
+  if (loading || !user) return null
+  return <Onboarding />
+}
+
 function LoadingScreen() {
   return (
     <div className="min-h-screen bg-bg-base flex items-center justify-center">
@@ -64,13 +72,15 @@ export default function App() {
     <ErrorBoundary>
       <ThemeProvider>
         <AuthProvider>
-          <ProgressProvider>
-            <ReviewProvider>
-              <StageProvider>
-                <FocusProvider>
-                  <AchievementToasts />
-                  <InstallPrompt />
-                  <Suspense fallback={<LoadingScreen />}>
+          <ToastProvider>
+            <ProgressProvider>
+              <ReviewProvider>
+                <StageProvider>
+                  <FocusProvider>
+                    <AchievementToasts />
+                    <InstallPrompt />
+                    <OnboardingGate />
+                    <Suspense fallback={<LoadingScreen />}>
                     <Routes>
                       <Route path="/login" element={<Login />} />
                       <Route path="/privacy" element={<Privacy />} />
@@ -105,10 +115,11 @@ export default function App() {
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Suspense>
-                </FocusProvider>
-              </StageProvider>
-            </ReviewProvider>
-          </ProgressProvider>
+                  </FocusProvider>
+                </StageProvider>
+              </ReviewProvider>
+            </ProgressProvider>
+          </ToastProvider>
         </AuthProvider>
       </ThemeProvider>
     </ErrorBoundary>
